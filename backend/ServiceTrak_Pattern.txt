@@ -1,0 +1,20 @@
+backend/
+├── app/
+│   ├── __init__.py
+|   ├── config.py
+│   ├── extensions.py
+│   ├── models.py
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── auth.py
+│   │   ├── vehicles.py
+│   │   ├── service_records.py
+│   │   └── reminders.py
+│   └── utils/
+│       ├── __init__.py
+│       └── nhtsa.py
+├── instance/
+│   └── servicetrack.db   (auto-creates)
+├── .env                  
+├── run.py
+└── requirements.txt

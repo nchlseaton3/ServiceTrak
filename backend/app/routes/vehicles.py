@@ -29,7 +29,7 @@ def health():
 
 
 # CREATE vehicle
-@vehicles_bp.post("")
+@vehicles_bp.post("/")
 @jwt_required()
 def create_vehicle():
     user_id = int(get_jwt_identity())
@@ -59,7 +59,7 @@ def create_vehicle():
 
 
 # READ all vehicles for the logged-in user
-@vehicles_bp.get("")
+@vehicles_bp.get("/")
 @jwt_required()
 def list_vehicles():
     user_id = int(get_jwt_identity())

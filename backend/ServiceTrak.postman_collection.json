@@ -45,7 +45,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"email\": \"nijah@test.com\",\r\n  \"password\": \"test1234\"\r\n}\r\n",
+          "raw": "{\r\n  \"email\": \"nick@test.com\",\r\n  \"password\": \"test1234\"\r\n}\r\n",
           "options": {
             "raw": {
               "language": "json"
@@ -228,19 +228,31 @@
     },
     {
       "name": "List Vehicles",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
       "request": {
         "auth": {
           "type": "bearer",
           "bearer": [
             {
               "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0MDc4MiwianRpIjoiODI5ZTZiNmMtYzFiYS00MTRiLTk5YWYtNjZjYWRiODA5MjExIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDA3ODIsImNzcmYiOiI2MzU5MjI4MS00Mzg4LTRkMWYtYWVmZi1mNTQ1MDNjZGFhYzEiLCJleHAiOjE3NzA3NDE2ODJ9.A3qaqP0VV3y3p5b66MXt47n0t3eBbs0qEUWtC5BbWks",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0Mjk5MiwianRpIjoiYzMwZGZlYmMtMTI2ZC00MDk0LTk2ZGItZWYwNWVmODI2ZWMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDI5OTIsImNzcmYiOiJmMDg4NTY1Yy1iMmQyLTQ3MjYtODk5Yy1kMjlkMjA4YzU5ODgiLCJleHAiOjE3NzA3NDM4OTJ9.df7dxOt1HR3X5AqvXwW16eLP3ixci5R5BSFsHuRTXJA",
               "type": "string"
             }
           ]
         },
         "method": "GET",
         "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
         "url": {
           "raw": "http://127.0.0.1:5000/vehicles",
           "protocol": "http",
@@ -383,16 +395,319 @@
     {
       "name": "Create Service Record",
       "request": {
-        "method": "GET",
-        "header": []
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0NDQxNywianRpIjoiODJhZmU4ZWEtNzQ0My00NDQ5LTg5MDgtMjQzMDNlOTIyNmUzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDQ0MTcsImNzcmYiOiJhYTQ1NDNkYy0wNGI4LTRiYjYtODNlZC1kN2Y4NWY1Y2E3ZDkiLCJleHAiOjE3NzA3NDUzMTd9.M-Sx9INIUzIglcdAJCGJY2a4ftDrBtHJN7HbXt7h4ME",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"vehicle_id\": 1,\r\n  \"title\": \"Oil Change\",\r\n  \"category\": \"Maintenance\",\r\n  \"service_date\": \"2026-02-10\",\r\n  \"mileage\": 123456,\r\n  \"cost\": 49.99,\r\n  \"notes\": \"5W-30 full synthetic\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/service-records",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "service-records"
+          ]
+        }
       },
       "response": []
     },
     {
       "name": "Service Records",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0NDQxNywianRpIjoiODJhZmU4ZWEtNzQ0My00NDQ5LTg5MDgtMjQzMDNlOTIyNmUzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDQ0MTcsImNzcmYiOiJhYTQ1NDNkYy0wNGI4LTRiYjYtODNlZC1kN2Y4NWY1Y2E3ZDkiLCJleHAiOjE3NzA3NDUzMTd9.M-Sx9INIUzIglcdAJCGJY2a4ftDrBtHJN7HbXt7h4ME",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/service-records/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "service-records",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Service Record",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0NDQxNywianRpIjoiODJhZmU4ZWEtNzQ0My00NDQ5LTg5MDgtMjQzMDNlOTIyNmUzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDQ0MTcsImNzcmYiOiJhYTQ1NDNkYy0wNGI4LTRiYjYtODNlZC1kN2Y4NWY1Y2E3ZDkiLCJleHAiOjE3NzA3NDUzMTd9.M-Sx9INIUzIglcdAJCGJY2a4ftDrBtHJN7HbXt7h4ME",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"notes\": \"5W-40 full synthetic\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/service-records/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "service-records",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Service Records",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0NDQxNywianRpIjoiODJhZmU4ZWEtNzQ0My00NDQ5LTg5MDgtMjQzMDNlOTIyNmUzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDQ0MTcsImNzcmYiOiJhYTQ1NDNkYy0wNGI4LTRiYjYtODNlZC1kN2Y4NWY1Y2E3ZDkiLCJleHAiOjE3NzA3NDUzMTd9.M-Sx9INIUzIglcdAJCGJY2a4ftDrBtHJN7HbXt7h4ME",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/service-records/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "service-records",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "View Reminders",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0NTIzMiwianRpIjoiMTIwNjA1ZjMtNGY2Ny00MTA1LTllNzMtODQ1OTY1OTc2NTI2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDUyMzIsImNzcmYiOiI4MDZjNGQ2ZS1jNjUwLTQ4NDEtYjUxNC0wYzcwNGUzZTMwZWEiLCJleHAiOjE3NzA3NDYxMzJ9.CuI3pKILSXc4okYLIIynjf2hn8lRB7JdxvnLZOcrHOA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/reminders/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "reminders",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Reminder",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0NTIzMiwianRpIjoiMTIwNjA1ZjMtNGY2Ny00MTA1LTllNzMtODQ1OTY1OTc2NTI2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDUyMzIsImNzcmYiOiI4MDZjNGQ2ZS1jNjUwLTQ4NDEtYjUxNC0wYzcwNGUzZTMwZWEiLCJleHAiOjE3NzA3NDYxMzJ9.CuI3pKILSXc4okYLIIynjf2hn8lRB7JdxvnLZOcrHOA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"vehicle_id\": 1,\r\n  \"title\": \"Rotate tires\",\r\n  \"due_date\": \"2026-03-01\",\r\n  \"notes\": \"Every 6k miles\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/reminders",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "reminders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Reminder",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0NTQ3MCwianRpIjoiNzJiOTQ5ZWEtYTVjZC00Y2IzLTk5YWQtMTFmZGU2YmY4N2FkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDU0NzAsImNzcmYiOiI1ZmZiMTU5Mi0xMmRlLTQ1MDUtOTY1YS02MzkwZWMzZTgxZTciLCJleHAiOjE3NzA3NDYzNzB9.guVoud4tQtmuokC2OYnpr1iCHAJenAcJW6c3bJebWCg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"is_completed\": true\r\n}\r\n\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/reminders/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "reminders",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Reminder",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0NTY0NSwianRpIjoiZmE1YzMzZTgtMGNjZC00MTE4LWJiZmYtMjdhOThkMGU0ZWZlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDU2NDUsImNzcmYiOiJjZGI2YmRmZC1iODY2LTQ0ZTktOTcyMi0zNmU0NjFhNTM1ZWYiLCJleHAiOjE3NzA3NDY1NDV9.9W1cK3QWdWNfyhgdzsa8yE0he8TYxGwvfwR01WEE7_E",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/reminders/2",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "reminders",
+            "2"
+          ]
+        }
       },
       "response": []
     }

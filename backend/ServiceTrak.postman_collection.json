@@ -144,6 +144,257 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Status check",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/auth/health",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "auth",
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register Vehicle",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0Mjk5MiwianRpIjoiYzMwZGZlYmMtMTI2ZC00MDk0LTk2ZGItZWYwNWVmODI2ZWMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDI5OTIsImNzcmYiOiJmMDg4NTY1Yy1iMmQyLTQ3MjYtODk5Yy1kMjlkMjA4YzU5ODgiLCJleHAiOjE3NzA3NDM4OTJ9.df7dxOt1HR3X5AqvXwW16eLP3ixci5R5BSFsHuRTXJA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nickname\": \"Daily #3\",\r\n  \"vin\": \"1G2ZH17N894222089\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/vehicles",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "vehicles"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Vehicles",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0MDc4MiwianRpIjoiODI5ZTZiNmMtYzFiYS00MTRiLTk5YWYtNjZjYWRiODA5MjExIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDA3ODIsImNzcmYiOiI2MzU5MjI4MS00Mzg4LTRkMWYtYWVmZi1mNTQ1MDNjZGFhYzEiLCJleHAiOjE3NzA3NDE2ODJ9.A3qaqP0VV3y3p5b66MXt47n0t3eBbs0qEUWtC5BbWks",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/vehicles",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "vehicles"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Vehicle",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0MTkxOCwianRpIjoiNWVjMmM2YzQtMDg1NS00NWNmLWJiMzktOTAwMzFkYjBhZDY1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDE5MTgsImNzcmYiOiJkZjk1YWRjZS1jOWEwLTQ2NmEtOTg4OS0wMDI3MGU2ZDdjYTciLCJleHAiOjE3NzA3NDI4MTh9.tMb1RNI_hQOGSo6f2koHLlsC7HBK58DcIqf6H_FyCIA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"trim\": \"Si\",\r\n  \"vin\": \"1HGCM82633A004352\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/vehicles/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "vehicles",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Vehicle",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0MjQ1NiwianRpIjoiOGQ4MmQ4ZmQtYWUxOS00MDhkLThmMjAtNzIxOGY1YzgzODQ2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDI0NTYsImNzcmYiOiI2YWNlOGUyYS03MjQ2LTQ5N2UtYTMxMC1lOWNlOWUwZjlmNDQiLCJleHAiOjE3NzA3NDMzNTZ9.iCc8AvunDb-m_9AMgFGXyENj7klLYO-1zJXQam05wN4",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/vehicles/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "vehicles",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Decode vin",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3MDc0Mjk5MiwianRpIjoiYzMwZGZlYmMtMTI2ZC00MDk0LTk2ZGItZWYwNWVmODI2ZWMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzA3NDI5OTIsImNzcmYiOiJmMDg4NTY1Yy1iMmQyLTQ3MjYtODk5Yy1kMjlkMjA4YzU5ODgiLCJleHAiOjE3NzA3NDM4OTJ9.df7dxOt1HR3X5AqvXwW16eLP3ixci5R5BSFsHuRTXJA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/vehicles/3/decode-vin",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "vehicles",
+            "3",
+            "decode-vin"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Service Record",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Service Records",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
     }
   ]
 }

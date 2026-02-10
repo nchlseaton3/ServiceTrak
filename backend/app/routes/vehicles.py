@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-
+from app.utils.nhtsa import decode_vin
 from app.extensions import db
 from app.models import Vehicle
 
@@ -130,3 +130,38 @@ def delete_vehicle(vehicle_id: int):
     db.session.delete(vehicle)
     db.session.commit()
     return jsonify({"message": "Vehicle deleted."}), 200
+
+#POST Vin decoder
+@vehicles_bp.post("/<int:vehicle_id>/decode-vin")
+@jwt_required()
+def decode_vehicle_vin(vehicle_id: int):
+    user_id = int(get_jwt_identity())
+
+    vehicle = Vehicle.query.filter_by(id=vehicle_id, user_id=user_id).first()
+    if not vehicle:
+        return jsonify({"message": "Vehicle not found."}), 404
+
+    if not vehicle.vin:
+        return jsonify({"message": "No VIN on this vehicle."}), 400
+
+    try:
+        decoded = decode_vin(vehicle.vin)
+    except Exception:
+        return jsonify({"message": "Failed to decode VIN."}), 502
+
+    if not decoded:
+        return jsonify({"message": "No data returned from VIN API."}), 404
+
+    # Update vehicle with decoded data
+    vehicle.year = decoded.get("year")
+    vehicle.make = decoded.get("make")
+    vehicle.model = decoded.get("model")
+    vehicle.trim = decoded.get("trim")
+    vehicle.engine = decoded.get("engine")
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "VIN decoded successfully.",
+        "vehicle": vehicle_to_dict(vehicle),
+    }), 200

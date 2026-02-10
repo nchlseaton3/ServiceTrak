@@ -1,7 +1,6 @@
 backend/
 ├── app/
 │   ├── __init__.py
-|   ├── config.py
 │   ├── extensions.py
 │   ├── models.py
 │   ├── routes/
@@ -16,5 +15,6 @@ backend/
 ├── instance/
 │   └── servicetrack.db   (auto-creates)
 ├── .env                  
+├── config.py
 ├── run.py
 └── requirements.txt

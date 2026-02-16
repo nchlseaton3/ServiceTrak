@@ -41,45 +41,51 @@ export default function Dashboard() {
   }
 
   return (
-    <div style={{ padding: 16 }}>
-      <h2>Dashboard</h2>
+    <div className="container stack">
+      <h2 style={{ margin: 0 }}>Dashboard</h2>
 
-      {error && <p style={{ color: "crimson" }}>{error}</p>}
+      {error && <p className="error">{error}</p>}
 
-      <div style={{ display: "grid", gap: 16, maxWidth: 520 }}>
-        <form onSubmit={handleCreate} style={{ display: "grid", gap: 10 }}>
-          <h3>Add Vehicle</h3>
+      <div className="card">
+        <h3>Add Vehicle</h3>
+        <form className="form" onSubmit={handleCreate}>
           <input
+            className="input"
             value={form.nickname}
             onChange={(e) => setForm((p) => ({ ...p, nickname: e.target.value }))}
             placeholder="Nickname (optional)"
           />
           <input
+            className="input"
             value={form.vin}
             onChange={(e) => setForm((p) => ({ ...p, vin: e.target.value }))}
             placeholder="VIN (17 chars)"
           />
-          <button type="submit">Add</button>
+          <button className="btn" type="submit">Add</button>
         </form>
+      </div>
 
-        <div>
-          <h3>Your Vehicles</h3>
-          {loading ? (
-            <p>Loading...</p>
-          ) : vehicles.length === 0 ? (
-            <p>No vehicles yet.</p>
-          ) : (
-            <ul>
-              {vehicles.map((v) => (
-                <li key={v.id}>
-                  <Link to={`/vehicles/${v.id}`}>
-                    {v.nickname || "Vehicle"} — {v.year || "Year?"} {v.make || ""} {v.model || ""} ({v.vin || "No VIN"})
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+      <div className="card">
+        <h3>Your Vehicles</h3>
+
+        {loading ? (
+          <p className="muted">Loading...</p>
+        ) : vehicles.length === 0 ? (
+          <p className="muted">No vehicles yet — add one above.</p>
+        ) : (
+          <ul className="list">
+            {vehicles.map((v) => (
+              <li key={v.id}>
+                <Link to={`/vehicles/${v.id}`}>
+                  <b>{v.nickname || "Vehicle"}</b>{" "}
+                  <span className="muted">
+                    — {v.year || "Year?"} {v.make || ""} {v.model || ""} ({v.vin || "No VIN"})
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

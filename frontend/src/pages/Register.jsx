@@ -33,7 +33,7 @@ export default function Register() {
       <div className="card" style={{ maxWidth: 460 }}>
         <h2 style={{ margin: 0 }}>Register</h2>
         <p className="muted" style={{ marginTop: 6 }}>
-          Create your account to start tracking vehicles, maintenance history, and reminders.
+          Create your account to start tracking vehicles, maintenance history, and store reminders.
         </p>
 
         {error && <p className="error">{error}</p>}

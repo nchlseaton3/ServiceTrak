@@ -9,7 +9,7 @@ export default function Navbar() {
     <nav className="card" style={{ borderRadius: 0, borderLeft: 0, borderRight: 0 }}>
       <div className="container row">
         <Link to="/" style={{ fontWeight: 800, letterSpacing: 0.2 }}>
-          ServiceTrack
+          ServiceTrak
         </Link>
 
         <div style={{ marginLeft: "auto" }} className="row">

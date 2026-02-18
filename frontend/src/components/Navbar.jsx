@@ -15,6 +15,8 @@ export default function Navbar() {
         <div style={{ marginLeft: "auto" }} className="row">
           {token ? (
             <>
+              <Link to="/profile">Profile</Link>
+              
               <span className="muted">
                 {user
                   ? `${user.first_name || ""} ${user.last_name || ""}`.trim() || user.email

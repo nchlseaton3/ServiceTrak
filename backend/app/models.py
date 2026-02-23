@@ -19,6 +19,10 @@ class User(db.Model, TimestampMixin):
 class Vehicle(db.Model, TimestampMixin):
     __tablename__ = "vehicles"
 
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "vin", name="uq_vehicle_user_vin"),
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
 

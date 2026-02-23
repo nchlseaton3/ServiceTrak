@@ -41,6 +41,12 @@ def create_vehicle():
     # Optional basic VIN validation if provided
     if vin and len(vin) != 17:
         return jsonify({"message": "VIN must be 17 characters."}), 400
+    
+        # Duplicate VIN check (per user)
+    if vin:
+        existing = Vehicle.query.filter_by(user_id=user_id, vin=vin).first()
+        if existing:
+            return jsonify({"message": "You already have a vehicle with this VIN."}), 409
 
     vehicle = Vehicle(
         user_id=user_id,
@@ -99,6 +105,15 @@ def update_vehicle(vehicle_id: int):
         vin = (data.get("vin") or "").strip().upper() or None
         if vin and len(vin) != 17:
             return jsonify({"message": "VIN must be 17 characters."}), 400
+                # Duplicate VIN check (per user) excluding this vehicle
+        if vin:
+            existing = Vehicle.query.filter(
+                Vehicle.user_id == user_id,
+                Vehicle.vin == vin,
+                Vehicle.id != vehicle.id
+            ).first()
+            if existing:
+                return jsonify({"message": "You already have a vehicle with this VIN."}), 409
         vehicle.vin = vin
 
     # Decoded/entered details (optional)

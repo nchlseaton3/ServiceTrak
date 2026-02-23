@@ -180,3 +180,26 @@ def decode_vehicle_vin(vehicle_id: int):
         "message": "VIN decoded successfully.",
         "vehicle": vehicle_to_dict(vehicle),
     }), 200
+
+# POST VIN decoder (preview - no vehicle needed yet)
+@vehicles_bp.post("/decode")
+@jwt_required()
+def decode_vin_preview():
+    data = request.get_json(silent=True) or {}
+    vin = (data.get("vin") or "").strip().upper()
+
+    if not vin:
+        return jsonify({"message": "VIN is required."}), 400
+    if len(vin) != 17:
+        return jsonify({"message": "VIN must be 17 characters."}), 400
+
+    try:
+        decoded = decode_vin(vin)
+    except Exception:
+        return jsonify({"message": "Failed to decode VIN."}), 502
+
+    if not decoded:
+        return jsonify({"message": "No data returned from VIN API."}), 404
+
+    # Return decoded fields only (frontend will decide what to save)
+    return jsonify({"decoded": decoded}), 200

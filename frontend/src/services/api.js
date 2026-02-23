@@ -38,6 +38,7 @@ export const api = {
   updateVehicle: (token, id, payload) => request(`/vehicles/${id}`, { method: "PUT", token, body: payload }),
   deleteVehicle: (token, id) => request(`/vehicles/${id}`, { method: "DELETE", token }),
   decodeVin: (token, id) => request(`/vehicles/${id}/decode-vin`, { method: "POST", token }),
+  decodeVinPreview: (token, vin) => request("/vehicles/decode", { method: "POST", token, body: { vin } }),
 
   // Service Records
   listServiceRecords: (token, vehicleId) => {

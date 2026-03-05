@@ -12,6 +12,8 @@ export default function VehicleDetail() {
   const [records, setRecords] = useState([]);
   const [reminders, setReminders] = useState([]);
   const [isEditingVehicle, setIsEditingVehicle] = useState(false);
+  const [editingRecordId, setEditingRecordId] = useState(null);
+  const [editingReminderId, setEditingReminderId] = useState(null);
   const [error, setError] = useState("");
 
   const [recordForm, setRecordForm] = useState({
@@ -40,6 +42,22 @@ export default function VehicleDetail() {
     engine: "",
   });
 
+  const [editRecordForm, setEditRecordForm] = useState({
+    title: "",
+    category: "Maintenance",
+    service_date: "",
+    mileage: "",
+    cost: "",
+    notes: "",
+  });
+
+  const [editReminderForm, setEditReminderForm] = useState({
+    title: "",
+    due_date: "",
+    due_mileage: "",
+    notes: "",
+  });
+
   const numberFmt = new Intl.NumberFormat();
   const moneyFmt = new Intl.NumberFormat(undefined, {
     style: "currency",
@@ -50,6 +68,7 @@ export default function VehicleDetail() {
     const data = await api.getVehicle(token, id);
     setVehicle(data.vehicle);
     const v = data.vehicle;
+    setVehicle(v);
     setVehicleForm({
       nickname: v.nickname || "",
       vin: v.vin || "",
@@ -272,6 +291,93 @@ export default function VehicleDetail() {
     setError("");
   }
 
+  function startEditRecord(r) {
+    const rid = Number(r.id);
+    if (editingRecordId === rid) return setEditingRecordId(null);
+
+    setEditingRecordId(rid);
+    setEditRecordForm({
+      title: r.title || "",
+      category: r.category || "Maintenance",
+      service_date: r.service_date || "",
+      mileage: r.mileage ?? "",
+      cost: r.cost ?? "",
+      notes: r.notes || "",
+    });
+  }
+
+  async function handleUpdateRecordManual(recordId) {
+    setError("");
+
+    const payload = {
+      title: editRecordForm.title.trim(),
+      category: editRecordForm.category.trim() || null,
+      service_date: editRecordForm.service_date,
+      mileage:
+        editRecordForm.mileage === "" ? null : Number(editRecordForm.mileage),
+      cost: editRecordForm.cost === "" ? null : Number(editRecordForm.cost),
+      notes: editRecordForm.notes.trim() || null,
+    };
+
+    try {
+      await api.updateServiceRecord(token, recordId, payload);
+      setEditingRecordId(null);
+      await loadRecords();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  function cancelEditRecord() {
+    setEditingRecordId(null);
+  }
+
+  function startEditReminder(r) {
+    setEditingReminderId(Number(r.id));
+    setEditReminderForm({
+      title: r.title || "",
+      due_date: r.due_date || "",
+      due_mileage: r.due_mileage ?? "",
+      notes: r.notes || "",
+    });
+  }
+
+  async function handleUpdateReminder(e) {
+    e.preventDefault();
+    setError("");
+
+    const payload = {
+      title: editReminderForm.title.trim(),
+      due_date: editReminderForm.due_date || null,
+      due_mileage:
+        editReminderForm.due_mileage === ""
+          ? null
+          : Number(editReminderForm.due_mileage),
+      notes: editReminderForm.notes.trim() || null,
+    };
+
+    // require due_date or due_mileage
+    if (
+      !payload.due_date &&
+      (payload.due_mileage === null || Number.isNaN(payload.due_mileage))
+    ) {
+      setError("Please provide a due date or due mileage.");
+      return;
+    }
+
+    try {
+      await api.updateReminder(token, editingReminderId, payload);
+      setEditingReminderId(null);
+      await loadReminders();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  function cancelEditReminder() {
+    setEditingReminderId(null);
+  }
+
   return (
     <div className="container stack">
       <div className="card">
@@ -281,72 +387,79 @@ export default function VehicleDetail() {
         </h2>
 
         {isEditingVehicle && (
-  <>
-    <hr className="hr" />
-    <form className="form" onSubmit={handleSaveVehicle}>
-      <input
-        className="input"
-        value={vehicleForm.nickname}
-        onChange={(e) => updateVehicleForm("nickname", e.target.value)}
-        placeholder="Nickname (optional)"
-      />
+          <>
+            <hr className="hr" />
+            <form className="form" onSubmit={handleSaveVehicle}>
+              <input
+                className="input"
+                value={vehicleForm.nickname}
+                onChange={(e) => updateVehicleForm("nickname", e.target.value)}
+                placeholder="Nickname (optional)"
+              />
 
-      <input
-        className="input"
-        value={vehicleForm.vin}
-        onChange={(e) => updateVehicleForm("vin", e.target.value)}
-        placeholder="VIN (17 chars)"
-      />
+              <input
+                className="input"
+                value={vehicleForm.vin}
+                onChange={(e) => updateVehicleForm("vin", e.target.value)}
+                placeholder="VIN (17 chars)"
+              />
 
-      <input
-        className="input"
-        value={vehicleForm.year}
-        onChange={(e) => updateVehicleForm("year", e.target.value)}
-        placeholder="Year"
-        inputMode="numeric"
-      />
+              <input
+                className="input"
+                value={vehicleForm.year}
+                onChange={(e) => updateVehicleForm("year", e.target.value)}
+                placeholder="Year"
+                inputMode="numeric"
+              />
 
-      <input
-        className="input"
-        value={vehicleForm.make}
-        onChange={(e) => updateVehicleForm("make", e.target.value)}
-        placeholder="Make"
-      />
+              <input
+                className="input"
+                value={vehicleForm.make}
+                onChange={(e) => updateVehicleForm("make", e.target.value)}
+                placeholder="Make"
+              />
 
-      <input
-        className="input"
-        value={vehicleForm.model}
-        onChange={(e) => updateVehicleForm("model", e.target.value)}
-        placeholder="Model"
-      />
+              <input
+                className="input"
+                value={vehicleForm.model}
+                onChange={(e) => updateVehicleForm("model", e.target.value)}
+                placeholder="Model"
+              />
 
-      <input
-        className="input"
-        value={vehicleForm.trim}
-        onChange={(e) => updateVehicleForm("trim", e.target.value)}
-        placeholder="Trim"
-      />
+              <input
+                className="input"
+                value={vehicleForm.trim}
+                onChange={(e) => updateVehicleForm("trim", e.target.value)}
+                placeholder="Trim"
+              />
 
-      <input
-        className="input"
-        value={vehicleForm.engine}
-        onChange={(e) => updateVehicleForm("engine", e.target.value)}
-        placeholder="Engine"
-      />
+              <input
+                className="input"
+                value={vehicleForm.engine}
+                onChange={(e) => updateVehicleForm("engine", e.target.value)}
+                placeholder="Engine"
+              />
 
-      <div className="row">
-        <button className="btn" type="submit">Save</button>
-        <button className="btn btn-secondary" type="button" onClick={handleCancelVehicleEdit}>
-          Cancel
-        </button>
-      </div>
+              <div className="row">
+                <button className="btn" type="submit">
+                  Save
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  type="button"
+                  onClick={handleCancelVehicleEdit}
+                >
+                  Cancel
+                </button>
+              </div>
 
-      <p className="small muted" style={{ margin: 0 }}>
-        Tip: If VIN decode doesn’t provide the engine (common on some vehicles), you can enter it manually here.
-      </p>
-    </form>
-  </>
-)}
+              <p className="small muted" style={{ margin: 0 }}>
+                Tip: If VIN decode doesn’t provide the engine (common on some
+                vehicles), you can enter it manually here.
+              </p>
+            </form>
+          </>
+        )}
 
         <div className="row" style={{ marginTop: 12 }}>
           <button
@@ -462,25 +575,151 @@ export default function VehicleDetail() {
                   <div>
                     <b>{r.title}</b>{" "}
                     <span className="muted">({r.category || "—"})</span>
-                    <div className="muted" style={{ marginTop: 6 }}>
-                      <div>Date: {r.service_date}</div>
-                      {r.mileage !== null && r.mileage !== undefined && (
-                        <div>Mileage: {numberFmt.format(r.mileage)}</div>
-                      )}
-                      {r.cost !== null && r.cost !== undefined && (
-                        <div>Cost: {moneyFmt.format(Number(r.cost))}</div>
-                      )}
-                    </div>
-                    {r.notes && <p style={{ marginTop: 8 }}>{r.notes}</p>}
+                    {editingRecordId !== Number(r.id) ? (
+                      <>
+                        <div className="muted" style={{ marginTop: 6 }}>
+                          <div>Date: {r.service_date}</div>
+                          {r.mileage !== null && r.mileage !== undefined && (
+                            <div>Mileage: {numberFmt.format(r.mileage)}</div>
+                          )}
+                          {r.cost !== null && r.cost !== undefined && (
+                            <div>Cost: {moneyFmt.format(Number(r.cost))}</div>
+                          )}
+                        </div>
+                        {r.notes && <p style={{ marginTop: 8 }}>{r.notes}</p>}
+                      </>
+                    ) : null}
+                    {editingRecordId === Number(r.id) && (
+                      <form
+                        id={`edit-record-${r.id}`}
+                        className="form"
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          handleUpdateRecordManual(r.id);
+                        }}
+                        style={{ marginTop: 12 }}
+                      >
+                        <input
+                          className="input"
+                          value={editRecordForm.title}
+                          onChange={(e) =>
+                            setEditRecordForm((p) => ({
+                              ...p,
+                              title: e.target.value,
+                            }))
+                          }
+                          placeholder="Title"
+                          required
+                        />
+
+                        <select
+                          className="select"
+                          value={editRecordForm.category}
+                          onChange={(e) =>
+                            setEditRecordForm((p) => ({
+                              ...p,
+                              category: e.target.value,
+                            }))
+                          }
+                        >
+                          <option>Maintenance</option>
+                          <option>Repair</option>
+                          <option>Inspection</option>
+                          <option>Other</option>
+                        </select>
+
+                        <input
+                          className="input"
+                          type="date"
+                          value={editRecordForm.service_date}
+                          onChange={(e) =>
+                            setEditRecordForm((p) => ({
+                              ...p,
+                              service_date: e.target.value,
+                            }))
+                          }
+                          required
+                        />
+
+                        <input
+                          className="input"
+                          value={editRecordForm.mileage}
+                          onChange={(e) =>
+                            setEditRecordForm((p) => ({
+                              ...p,
+                              mileage: e.target.value,
+                            }))
+                          }
+                          placeholder="Mileage (optional)"
+                          inputMode="numeric"
+                        />
+
+                        <input
+                          className="input"
+                          value={editRecordForm.cost}
+                          onChange={(e) =>
+                            setEditRecordForm((p) => ({
+                              ...p,
+                              cost: e.target.value,
+                            }))
+                          }
+                          placeholder="Cost (optional)"
+                          inputMode="decimal"
+                        />
+
+                        <textarea
+                          className="textarea"
+                          value={editRecordForm.notes}
+                          onChange={(e) =>
+                            setEditRecordForm((p) => ({
+                              ...p,
+                              notes: e.target.value,
+                            }))
+                          }
+                          placeholder="Notes (optional)"
+                          rows={3}
+                        />
+                      </form>
+                    )}
                   </div>
 
-                  <button
-                    className="btn btn-secondary"
-                    type="button"
-                    onClick={() => handleDeleteRecord(r.id)}
-                  >
-                    Delete
-                  </button>
+                  <div className="stack" style={{ gap: 8 }}>
+                    {editingRecordId === Number(r.id) ? (
+                      <>
+                        <button
+                          className="btn"
+                          type="submit"
+                          onClick={() => handleUpdateRecordManual(r.id)}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className="btn btn-secondary"
+                          type="button"
+                          onClick={cancelEditRecord}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="btn btn-secondary"
+                          type="button"
+                          onClick={() => startEditRecord(r)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          type="button"
+                          onClick={() => handleDeleteRecord(r.id)}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -561,34 +800,130 @@ export default function VehicleDetail() {
                       {r.title}
                     </b>
 
-                    <div className="muted" style={{ marginTop: 6 }}>
-                      {r.due_date && <div>Due Date: {r.due_date}</div>}
-                      {r.due_mileage !== null &&
-                        r.due_mileage !== undefined && (
-                          <div>
-                            Due Mileage: {numberFmt.format(r.due_mileage)}
-                          </div>
-                        )}
-                    </div>
+                    {editingReminderId !== Number(r.id) ? (
+                      <>
+                        <div className="muted" style={{ marginTop: 6 }}>
+                          {r.due_date && <div>Due Date: {r.due_date}</div>}
+                          {r.due_mileage !== null &&
+                            r.due_mileage !== undefined && (
+                              <div>
+                                Due Mileage: {numberFmt.format(r.due_mileage)}
+                              </div>
+                            )}
+                        </div>
+                        {r.notes && <p style={{ marginTop: 8 }}>{r.notes}</p>}
+                      </>
+                    ) : null}
 
-                    {r.notes && <p style={{ marginTop: 8 }}>{r.notes}</p>}
+                    {editingReminderId === Number(r.id) && (
+                      <form
+                        id={`edit-reminder-${r.id}`}
+                        className="form"
+                        onSubmit={handleUpdateReminder}
+                        style={{ marginTop: 12 }}
+                      >
+                        <input
+                          className="input"
+                          value={editReminderForm.title}
+                          onChange={(e) =>
+                            setEditReminderForm((p) => ({
+                              ...p,
+                              title: e.target.value,
+                            }))
+                          }
+                          placeholder="Title"
+                          required
+                        />
+
+                        <input
+                          className="input"
+                          type="date"
+                          value={editReminderForm.due_date}
+                          onChange={(e) =>
+                            setEditReminderForm((p) => ({
+                              ...p,
+                              due_date: e.target.value,
+                            }))
+                          }
+                        />
+
+                        <input
+                          className="input"
+                          value={editReminderForm.due_mileage}
+                          onChange={(e) =>
+                            setEditReminderForm((p) => ({
+                              ...p,
+                              due_mileage: e.target.value,
+                            }))
+                          }
+                          placeholder="Due mileage (optional)"
+                          inputMode="numeric"
+                        />
+
+                        <textarea
+                          className="textarea"
+                          value={editReminderForm.notes}
+                          onChange={(e) =>
+                            setEditReminderForm((p) => ({
+                              ...p,
+                              notes: e.target.value,
+                            }))
+                          }
+                          placeholder="Notes (optional)"
+                          rows={3}
+                        />
+                      </form>
+                    )}
                   </div>
 
+                  {/* Actions live HERE (right side), NOT inside the form */}
                   <div className="stack" style={{ gap: 8 }}>
-                    <button
-                      className="btn btn-secondary"
-                      type="button"
-                      onClick={() => handleToggleReminder(r.id, r.is_completed)}
-                    >
-                      {r.is_completed ? "Mark Incomplete" : "Mark Complete"}
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      type="button"
-                      onClick={() => handleDeleteReminder(r.id)}
-                    >
-                      Delete
-                    </button>
+                    {editingReminderId === Number(r.id) ? (
+                      <>
+                        <button
+                          className="btn"
+                          type="submit"
+                          form={`edit-reminder-${r.id}`}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className="btn btn-secondary"
+                          type="button"
+                          onClick={cancelEditReminder}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="btn btn-secondary"
+                          type="button"
+                          onClick={() =>
+                            handleToggleReminder(r.id, r.is_completed)
+                          }
+                        >
+                          {r.is_completed ? "Mark Incomplete" : "Mark Complete"}
+                        </button>
+
+                        <button
+                          className="btn btn-secondary"
+                          type="button"
+                          onClick={() => startEditReminder(r)}
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          className="btn btn-danger"
+                          type="button"
+                          onClick={() => handleDeleteReminder(r.id)}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

@@ -3,10 +3,14 @@ import os
 from .extensions import db, init_extensions
 from .models import User, Vehicle, ServiceRecord, Reminder  # noqa: F401
 from config import Config
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    instance_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "instance")
+    os.makedirs(instance_path, exist_ok=True)
 
     init_extensions(app)
 
@@ -22,6 +26,9 @@ def create_app():
     app.register_blueprint(vehicles_bp, url_prefix="/vehicles")
     app.register_blueprint(service_records_bp, url_prefix="/service-records")
     app.register_blueprint(reminders_bp, url_prefix="/reminders")
+
+
+    CORS(app)
 
     # Create tables
     with app.app_context():

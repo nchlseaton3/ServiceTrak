@@ -39,7 +39,8 @@ export const api = {
   deleteVehicle: (token, id) => request(`/vehicles/${id}`, { method: "DELETE", token }),
   decodeVin: (token, id) => request(`/vehicles/${id}/decode-vin`, { method: "POST", token }),
   decodeVinPreview: (token, vin) => request("/vehicles/decode", { method: "POST", token, body: { vin } }),
-
+  getVehicleRecalls: (token, id) => request(`/vehicles/${id}/recalls`, { token }),
+  
   // Service Records
   listServiceRecords: (token, vehicleId) => {
     const qs = vehicleId ? `?vehicle_id=${vehicleId}` : "";

@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.utils.nhtsa import decode_vin
 from app.extensions import db
 from app.models import Vehicle
+import requests
 
 vehicles_bp = Blueprint("vehicles", __name__)
 
@@ -22,6 +23,33 @@ def vehicle_to_dict(v: Vehicle):
         "updated_at": v.updated_at.isoformat() if v.updated_at else None,
     }
 
+def lookup_recalls(year, make, model):
+    url = "https://api.nhtsa.gov/recalls/recallsByVehicle"
+    params = {
+        "make": make,
+        "model": model,
+        "modelYear": year,
+        "format": "json",
+    }
+
+    response = requests.get(url, params=params, timeout=15)
+    response.raise_for_status()
+
+    data = response.json()
+    results = data.get("results", []) or []
+
+    recalls = []
+    for item in results:
+        recalls.append({
+            "campaign_number": item.get("NHTSACampaignNumber"),
+            "report_date": item.get("ReportReceivedDate"),
+            "component": item.get("Component"),
+            "summary": item.get("Summary"),
+            "remedy": item.get("Remedy"),
+            "manufacturer": item.get("Manufacturer"),
+        })
+
+    return recalls
 
 @vehicles_bp.get("/health")
 def health():
@@ -203,3 +231,33 @@ def decode_vin_preview():
 
     # Return decoded fields only (frontend will decide what to save)
     return jsonify({"decoded": decoded}), 200
+
+@vehicles_bp.get("/<int:vehicle_id>/recalls")
+@jwt_required()
+def get_vehicle_recalls(vehicle_id: int):
+    user_id = int(get_jwt_identity())
+
+    vehicle = Vehicle.query.filter_by(id=vehicle_id, user_id=user_id).first()
+    if not vehicle:
+        return jsonify({"message": "Vehicle not found."}), 404
+
+    if not vehicle.year or not vehicle.make or not vehicle.model:
+        return jsonify({
+            "message": "Vehicle must have year, make, and model before checking recalls."
+        }), 400
+
+    try:
+        recalls = lookup_recalls(vehicle.year, vehicle.make, vehicle.model)
+    except Exception:
+        return jsonify({"message": "Failed to fetch recalls."}), 502
+
+    return jsonify({
+        "vehicle": {
+            "id": vehicle.id,
+            "year": vehicle.year,
+            "make": vehicle.make,
+            "model": vehicle.model,
+        },
+        "count": len(recalls),
+        "recalls": recalls,
+    }), 200

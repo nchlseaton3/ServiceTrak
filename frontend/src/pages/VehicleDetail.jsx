@@ -19,6 +19,8 @@ export default function VehicleDetail() {
   const [recallsLoaded, setRecallsLoaded] = useState(false);
   const [recallsLoading, setRecallsLoading] = useState(false);
   const [showRecalls, setShowRecalls] = useState(true);
+  const [showServiceRecords, setShowServiceRecords] = useState(true);
+  const [showReminders, setShowReminders] = useState(true);
 
   const [recordForm, setRecordForm] = useState({
     title: "",
@@ -511,81 +513,103 @@ export default function VehicleDetail() {
         </div>
       </div>
 
-     <div className="card">
-  <div className="row" style={{ justifyContent: "space-between", alignItems: "center" }}>
-    <div>
-      <h3 style={{ margin: 0 }}>Recall Lookup</h3>
-      <p className="small muted" style={{ marginTop: 6, marginBottom: 0 }}>
-        Check for open recalls using the vehicle's year, make, and model.
-      </p>
-    </div>
-
-    <div className="row" style={{ gap: 8 }}>
-      <button
-        className="btn"
-        type="button"
-        onClick={handleLookupRecalls}
-        disabled={recallsLoading}
-      >
-        {recallsLoading ? "Checking..." : "Check Recalls"}
-      </button>
-
-      {recallsLoaded && (
-        <button
-          className="btn btn-secondary"
-          type="button"
-          onClick={() => setShowRecalls((prev) => !prev)}
+      <div className="card">
+        <div
+          className="row"
+          style={{ justifyContent: "space-between", alignItems: "center" }}
         >
-          {showRecalls ? "Hide Recalls" : "Show Recalls"}
-        </button>
-      )}
-    </div>
-  </div>
+          <div>
+            <h3 style={{ margin: 0 }}>Recall Lookup</h3>
+            <p
+              className="small muted"
+              style={{ marginTop: 6, marginBottom: 0 }}
+            >
+              Check for open recalls using the vehicle's year, make, and model.
+            </p>
+          </div>
 
-  <hr className="hr" />
+          <div className="row" style={{ gap: 8 }}>
+            <button
+              className="btn"
+              type="button"
+              onClick={handleLookupRecalls}
+              disabled={recallsLoading}
+            >
+              {recallsLoading ? "Checking..." : "Check Recalls"}
+            </button>
 
-  {!recallsLoaded ? (
-    <p className="muted">No recall search run yet.</p>
-  ) : !showRecalls ? (
-    <p className="muted">
-      Recall results hidden. {recalls.length} result{recalls.length === 1 ? "" : "s"} loaded.
-    </p>
-  ) : recalls.length === 0 ? (
-    <p className="muted">No recalls found for this vehicle.</p>
-  ) : (
-    <div className="stack">
-      {recalls.map((recall, index) => (
-        <div key={recall.campaign_number || index} className="itemCard">
-          <b>{recall.component || "Recall"}</b>
-
-          {recall.campaign_number && (
-            <div className="muted" style={{ marginTop: 6 }}>
-              Campaign: {recall.campaign_number}
-            </div>
-          )}
-
-          {recall.report_date && (
-            <div className="muted">
-              Report Date: {recall.report_date}
-            </div>
-          )}
-
-          {recall.summary && <p style={{ marginTop: 8 }}>{recall.summary}</p>}
-
-          {recall.remedy && (
-            <>
-              <p style={{ marginTop: 8, marginBottom: 4 }}><b>Remedy:</b></p>
-              <p style={{ marginTop: 0 }}>{recall.remedy}</p>
-            </>
-          )}
+            {recallsLoaded && (
+              <button
+                className="btn btn-secondary"
+                type="button"
+                onClick={() => setShowRecalls((prev) => !prev)}
+              >
+                {showRecalls ? "Hide Recalls" : "Show Recalls"}
+              </button>
+            )}
+          </div>
         </div>
-      ))}
-    </div>
-  )}
-</div>
+
+        <hr className="hr" />
+
+        {!recallsLoaded ? (
+          <p className="muted">No recall search run yet.</p>
+        ) : !showRecalls ? (
+          <p className="muted">
+            Recall results hidden. {recalls.length} result
+            {recalls.length === 1 ? "" : "s"} loaded.
+          </p>
+        ) : recalls.length === 0 ? (
+          <p className="muted">No recalls found for this vehicle.</p>
+        ) : (
+          <div className="stack">
+            {recalls.map((recall, index) => (
+              <div key={recall.campaign_number || index} className="itemCard">
+                <b>{recall.component || "Recall"}</b>
+
+                {recall.campaign_number && (
+                  <div className="muted" style={{ marginTop: 6 }}>
+                    Campaign: {recall.campaign_number}
+                  </div>
+                )}
+
+                {recall.report_date && (
+                  <div className="muted">Report Date: {recall.report_date}</div>
+                )}
+
+                {recall.summary && (
+                  <p style={{ marginTop: 8 }}>{recall.summary}</p>
+                )}
+
+                {recall.remedy && (
+                  <>
+                    <p style={{ marginTop: 8, marginBottom: 4 }}>
+                      <b>Remedy:</b>
+                    </p>
+                    <p style={{ marginTop: 0 }}>{recall.remedy}</p>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="card">
-        <h3>Service Records</h3>
+        <div
+          className="row"
+          style={{ justifyContent: "space-between", alignItems: "center" }}
+        >
+          <h3 style={{ margin: 0 }}>Service Records</h3>
+
+          <button
+            className="btn btn-secondary"
+            type="button"
+            onClick={() => setShowServiceRecords((prev) => !prev)}
+          >
+            {showServiceRecords ? "Hide Records" : "Show Records"}
+          </button>
+        </div>
 
         <form className="form" onSubmit={handleCreateRecord}>
           <input
@@ -658,7 +682,12 @@ export default function VehicleDetail() {
 
         <hr className="hr" />
 
-        {records.length === 0 ? (
+        {!showServiceRecords ? (
+          <p className="muted">
+            Service records hidden. {records.length} record
+            {records.length === 1 ? "" : "s"} loaded.
+          </p>
+        ) : records.length === 0 ? (
           <p className="muted">No service records yet.</p>
         ) : (
           <div className="stack">
@@ -821,7 +850,20 @@ export default function VehicleDetail() {
       </div>
 
       <div className="card">
-        <h3>Reminders</h3>
+        <div
+          className="row"
+          style={{ justifyContent: "space-between", alignItems: "center" }}
+        >
+          <h3 style={{ margin: 0 }}>Reminders</h3>
+
+          <button
+            className="btn btn-secondary"
+            type="button"
+            onClick={() => setShowReminders((prev) => !prev)}
+          >
+            {showReminders ? "Hide Reminders" : "Show Reminders"}
+          </button>
+        </div>
 
         <form className="form" onSubmit={handleCreateReminder}>
           <input
@@ -875,7 +917,12 @@ export default function VehicleDetail() {
 
         <hr className="hr" />
 
-        {reminders.length === 0 ? (
+        {!showReminders ? (
+          <p className="muted">
+            Reminders hidden. {reminders.length} reminder
+            {reminders.length === 1 ? "" : "s"} loaded.
+          </p>
+        ) : reminders.length === 0 ? (
           <p className="muted">No reminders yet.</p>
         ) : (
           <div className="stack">

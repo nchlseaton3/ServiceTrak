@@ -52,6 +52,27 @@ class ServiceRecord(db.Model, TimestampMixin):
     cost = db.Column(db.Numeric(10, 2))
     notes = db.Column(db.Text)
 
+class ServiceRecordAttachment(db.Model, TimestampMixin):
+    __tablename__ = "service_record_attachments"
+
+    id = db.Column(db.Integer, primary_key=True)
+    service_record_id = db.Column(
+        db.Integer,
+        db.ForeignKey("service_records.id"),
+        nullable=False,
+        index=True,
+    )
+
+    file_name = db.Column(db.String(255), nullable=False)
+    file_url = db.Column(db.String(500), nullable=False)
+    public_id = db.Column(db.String(255), nullable=False)
+    file_type = db.Column(db.String(100))
+
+    service_record = db.relationship(
+        "ServiceRecord",
+        backref=db.backref("attachments", cascade="all, delete-orphan", lazy=True),
+    )    
+
 class Reminder(db.Model, TimestampMixin):
     __tablename__ = "reminders"
 

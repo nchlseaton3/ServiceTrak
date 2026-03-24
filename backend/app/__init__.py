@@ -4,10 +4,18 @@ from .extensions import db, init_extensions
 from .models import User, Vehicle, ServiceRecord, Reminder  # noqa: F401
 from config import Config
 from flask_cors import CORS
+import cloudinary
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    cloudinary.config(
+    cloud_name=app.config.get("CLOUDINARY_CLOUD_NAME"),
+    api_key=app.config.get("CLOUDINARY_API_KEY"),
+    api_secret=app.config.get("CLOUDINARY_API_SECRET"),
+    secure=True,
+)
 
     instance_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "instance")
     os.makedirs(instance_path, exist_ok=True)

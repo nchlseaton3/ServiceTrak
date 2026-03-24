@@ -1,14 +1,21 @@
 from flask import Flask
 import os
 from .extensions import db, init_extensions
-from .models import User, Vehicle, ServiceRecord, Reminder  # noqa: F401
+from .models import User, Vehicle, ServiceRecord, Reminder, ServiceRecordAttachment  # noqa: F401
 from config import Config
-from flask_cors import CORS
 import cloudinary
+
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    instance_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "instance")
+    os.makedirs(instance_path, exist_ok=True)
+
+    print("Cloud name:", app.config.get("CLOUDINARY_CLOUD_NAME"))
+    print("API key:", app.config.get("CLOUDINARY_API_KEY"))
+    print("Secret exists:", bool(app.config.get("CLOUDINARY_API_SECRET")))
 
     cloudinary.config(
     cloud_name=app.config.get("CLOUDINARY_CLOUD_NAME"),
@@ -16,9 +23,6 @@ def create_app():
     api_secret=app.config.get("CLOUDINARY_API_SECRET"),
     secure=True,
 )
-
-    instance_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "instance")
-    os.makedirs(instance_path, exist_ok=True)
 
     init_extensions(app)
 
@@ -29,14 +33,14 @@ def create_app():
     from .routes.vehicles import vehicles_bp
     from .routes.service_records import service_records_bp
     from .routes.reminders import reminders_bp
+    from .routes.attachments import attachments_bp
 
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(vehicles_bp, url_prefix="/vehicles")
     app.register_blueprint(service_records_bp, url_prefix="/service-records")
     app.register_blueprint(reminders_bp, url_prefix="/reminders")
+    app.register_blueprint(attachments_bp)
 
-
-    CORS(app)
 
     # Create tables
     with app.app_context():

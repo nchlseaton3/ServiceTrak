@@ -13,10 +13,6 @@ def create_app():
     instance_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "instance")
     os.makedirs(instance_path, exist_ok=True)
 
-    print("Cloud name:", app.config.get("CLOUDINARY_CLOUD_NAME"))
-    print("API key:", app.config.get("CLOUDINARY_API_KEY"))
-    print("Secret exists:", bool(app.config.get("CLOUDINARY_API_SECRET")))
-
     cloudinary.config(
     cloud_name=app.config.get("CLOUDINARY_CLOUD_NAME"),
     api_key=app.config.get("CLOUDINARY_API_KEY"),

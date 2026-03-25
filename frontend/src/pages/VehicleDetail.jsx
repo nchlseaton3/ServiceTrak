@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContexts";
 import { api } from "../services/api";
+import ServiceRecordAttachments from "../components/ServiceRecordAttachments";
 
 export default function VehicleDetail() {
   const { id } = useParams();
@@ -709,6 +710,11 @@ export default function VehicleDetail() {
                           )}
                         </div>
                         {r.notes && <p style={{ marginTop: 8 }}>{r.notes}</p>}
+
+                        <ServiceRecordAttachments
+                          recordId={r.id}
+                          token={token}
+                        />
                       </>
                     ) : null}
                     {editingRecordId === Number(r.id) && (

@@ -1,0 +1,36 @@
+.attachment-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.attachment-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.attachment-image {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.attachment-image img {
+  max-width: 200px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  display: block;
+}
+
+.attachment-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 50px;
+  justify-content: center;
+}
+
+.attachment-actions .btn {
+  width: 100%;
+}

@@ -24,6 +24,26 @@ async function request(path, { method = "GET", token, body } = {}) {
   return data;
 }
 
+async function requestFormData(path, { method = "POST", token, formData } = {}) {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method,
+    headers: {
+      ...authHeaders(token),
+    },
+    body: formData,
+  });
+
+  const text = await res.text();
+  const data = text ? JSON.parse(text) : null;
+
+  if (!res.ok) {
+    const message = data?.message || `Request failed (${res.status})`;
+    throw new Error(message);
+  }
+
+  return data;
+}
+
 export const api = {
   // Auth
   register: (payload) => request("/auth/register", { method: "POST", body: payload }),
@@ -58,4 +78,25 @@ export const api = {
   createReminder: (token, payload) => request("/reminders/", { method: "POST", token, body: payload }),
   updateReminder: (token, id, payload) => request(`/reminders/${id}`, { method: "PUT", token, body: payload }),
   deleteReminder: (token, id) => request(`/reminders/${id}`, { method: "DELETE", token }),
+
+  // Service Record Attachments
+  listServiceRecordAttachments: (token, recordId) =>
+    request(`/service-records/${recordId}/attachments`, { token }),
+
+  uploadServiceRecordAttachment: (token, recordId, file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    return requestFormData(`/service-records/${recordId}/attachments`, {
+      method: "POST",
+      token,
+      formData,
+    });
+  },
+
+  deleteServiceRecordAttachment: (token, attachmentId) =>
+    request(`/service-records/attachments/${attachmentId}`, {
+      method: "DELETE",
+      token,
+    }),
 };

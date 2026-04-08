@@ -12,7 +12,9 @@ export default function VehicleList({ vehicles, loading, error }) {
   if (!vehicles || vehicles.length === 0) {
     return <p className="muted">No vehicles yet.</p>;
   }
-
+  function isDecoded(vehicle) {
+    return Boolean(vehicle.year && vehicle.make && vehicle.model);
+  }
   return (
     <div className="vehicle-list">
       {vehicles.map((vehicle) => (
@@ -28,10 +30,26 @@ export default function VehicleList({ vehicles, loading, error }) {
               <div className="muted vehicle-meta">
                 VIN: {vehicle.vin || "None"}
               </div>
+              <div className="vehicle-status-row">
+                <span
+                  className={`status-pill ${isDecoded(vehicle) ? "status-success" : "status-muted"}`}
+                >
+                  {isDecoded(vehicle) ? "Decoded" : "Not decoded"}
+                </span>
+
+                <span className="status-pill status-muted">
+                  Recalls: Not checked
+                </span>
+
+                <span className="status-pill status-muted">Reminders: --</span>
+              </div>
             </div>
 
             <div className="vehicle-card-actions">
-              <Link className="btn btn-secondary" to={`/vehicles/${vehicle.id}`}>
+              <Link
+                className="btn btn-secondary"
+                to={`/vehicles/${vehicle.id}`}
+              >
                 Open
               </Link>
             </div>

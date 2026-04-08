@@ -7,6 +7,10 @@ import Dashboard from "./pages/Dashboard";
 import VehicleDetail from "./pages/VehicleDetail";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
+import Vehicles from "./pages/Vehicles";
+import AddVehicle from "./pages/AddVehicle";
+import ServiceRecords from "./pages/ServiceRecords";
+import Reminders from "./pages/Reminders";
 
 export default function App() {
   return (
@@ -21,6 +25,25 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/vehicles"
+          element={
+            <ProtectedRoute>
+              <Vehicles />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/vehicles/new"
+          element={
+            <ProtectedRoute>
+              <AddVehicle />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/vehicles/:id"
           element={
@@ -29,6 +52,25 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/service-records"
+          element={
+            <ProtectedRoute>
+              <ServiceRecords />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/reminders"
+          element={
+            <ProtectedRoute>
+              <Reminders />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/profile"
           element={

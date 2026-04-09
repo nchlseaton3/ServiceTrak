@@ -1,8 +1,42 @@
+import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContexts";
+import { api } from "../services/api";
+import ServiceRecordsList from "../components/ServiceRecordsList";
+
 export default function ServiceRecords() {
+  const { token } = useAuth();
+  const [records, setRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  async function loadRecords() {
+    setError("");
+    setLoading(true);
+
+    try {
+      const data = await api.listServiceRecords(token);
+      setRecords(data.service_records || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadRecords();
+  }, []);
+
   return (
-    <div className="container">
-      <h2>Service Records</h2>
-      <p className="muted">This page will show service records in its own cleaner view.</p>
+    <div className="container stack">
+      <div className="card">
+        <h2>Service Records</h2>
+        <p className="muted">
+          View all saved service history across your vehicles.
+        </p>
+      </div>
+
+      <ServiceRecordsList records={records} loading={loading} error={error} />
     </div>
   );
 }

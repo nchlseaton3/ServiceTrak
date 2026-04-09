@@ -29,55 +29,43 @@ export default function Register() {
   }
 
   return (
-    <div className="container">
-      <div className="card" style={{ maxWidth: 460 }}>
-        <h2 style={{ margin: 0 }}>Register</h2>
-        <p className="muted" style={{ marginTop: 6 }}>
-          Create your account to start tracking vehicles, maintenance history, and store reminders.
-        </p>
-
+    <div className="auth-page">
+      <div className="card auth-card">
+        <h2>Register</h2>
         {error && <p className="error">{error}</p>}
 
-        <form onSubmit={handleSubmit} className="form" style={{ marginTop: 10 }}>
+        <form onSubmit={handleSubmit} className="form">
           <input
             className="input"
             value={form.first_name}
             onChange={(e) => update("first_name", e.target.value)}
             placeholder="First name"
-            autoComplete="given-name"
           />
-
           <input
             className="input"
             value={form.last_name}
             onChange={(e) => update("last_name", e.target.value)}
             placeholder="Last name"
-            autoComplete="family-name"
           />
-
           <input
             className="input"
             value={form.email}
             onChange={(e) => update("email", e.target.value)}
             placeholder="Email"
-            autoComplete="email"
           />
-
           <input
             className="input"
             value={form.password}
             onChange={(e) => update("password", e.target.value)}
             placeholder="Password"
             type="password"
-            autoComplete="new-password"
           />
-
           <button className="btn" type="submit">
             Create account
           </button>
         </form>
 
-        <p style={{ marginTop: 12 }}>
+        <p className="auth-link-row">
           Have an account? <Link to="/login">Login</Link>
         </p>
       </div>

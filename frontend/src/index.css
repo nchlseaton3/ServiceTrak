@@ -180,6 +180,43 @@ a:hover { text-decoration: underline; }
   border-color: #d9dde3;
 }
 
+.auth-page {
+  min-height: calc(100vh - 80px);
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-card h2 {
+  margin-bottom: 12px;
+}
+
+.auth-card .form {
+  margin-top: 12px;
+}
+
+.auth-link-row {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.profile-page {
+  min-height: calc(100vh - 80px);
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 520px; /* slightly wider than auth */
+}
+
 @media (max-width: 640px) {
   .vehicle-card-row {
     flex-direction: column;

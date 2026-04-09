@@ -4,7 +4,11 @@ import { api } from "../services/api";
 
 export default function Profile() {
   const { token } = useAuth();
-  const [form, setForm] = useState({ first_name: "", last_name: "", email: "" });
+  const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+  });
   const [status, setStatus] = useState({ error: "", success: "" });
 
   useEffect(() => {
@@ -40,8 +44,8 @@ export default function Profile() {
   }
 
   return (
-    <div className="container">
-      <div className="card" style={{ maxWidth: 520 }}>
+    <div className="profile-page">
+      <div className="card profile-card">
         <h2 style={{ margin: 0 }}>Profile</h2>
         <p className="muted" style={{ marginTop: 6 }}>
           Update your account information.
@@ -50,26 +54,35 @@ export default function Profile() {
         {status.error && <p className="error">{status.error}</p>}
         {status.success && <p>{status.success}</p>}
 
-        <form className="form" onSubmit={handleSubmit} style={{ marginTop: 10 }}>
+        <form
+          className="form"
+          onSubmit={handleSubmit}
+          style={{ marginTop: 10 }}
+        >
           <input
             className="input"
             value={form.first_name}
             onChange={(e) => update("first_name", e.target.value)}
             placeholder="First name"
           />
+
           <input
             className="input"
             value={form.last_name}
             onChange={(e) => update("last_name", e.target.value)}
             placeholder="Last name"
           />
+
           <input
             className="input"
             value={form.email}
             onChange={(e) => update("email", e.target.value)}
             placeholder="Email"
           />
-          <button className="btn" type="submit">Save Changes</button>
+
+          <button className="btn" type="submit">
+            Save Changes
+          </button>
         </form>
       </div>
     </div>

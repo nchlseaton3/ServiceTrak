@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../contexts/AuthContexts";
-import { api } from "../services/api";
-import VehicleList from "../components/VehicleList";
+import { useAuth } from "../../contexts/AuthContexts";
+import { api } from "../../services/api";
+import VehicleList from "../../components/Vehicles/VehicleList";
 
 export default function Vehicles() {
   const { token } = useAuth();

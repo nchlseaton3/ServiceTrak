@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContexts";
 import { api } from "../services/api";
-import RemindersList from "../components/RemindersList";
-import "../components/Reminders.css";
+import RemindersList from "../components/Reminders/RemindersList";
+import "../components/Reminders/Reminders.css";
 
 export default function Reminders() {
   const { token } = useAuth();

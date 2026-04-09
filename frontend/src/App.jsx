@@ -1,14 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "./pages//User/Login";
+import Register from "./pages/User/Register";
 import Dashboard from "./pages/Dashboard";
-import VehicleDetail from "./pages/VehicleDetail";
+import VehicleDetail from "./pages/Vehicle/VehicleDetail";
 import NotFound from "./pages/NotFound";
-import Profile from "./pages/Profile";
-import Vehicles from "./pages/Vehicles";
-import AddVehicle from "./pages/AddVehicle";
+import Profile from "./pages/User/Profile";
+import Vehicles from "./pages/Vehicle/Vehicles";
+import AddVehicle from "./pages/Vehicle/AddVehicle";
 import ServiceRecords from "./pages/ServiceRecords";
 import Reminders from "./pages/Reminders";
 

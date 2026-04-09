@@ -1,6 +1,6 @@
-import { useAuth } from "../contexts/AuthContexts";
+import { useAuth } from "../../contexts/AuthContexts";
 import { useNavigate } from "react-router-dom";
-import AddVehicleForm from "../components/AddVehicleForm";
+import AddVehicleForm from "../../components/Vehicles/AddVehicleForm";
 
 export default function AddVehicle() {
   const { token } = useAuth();

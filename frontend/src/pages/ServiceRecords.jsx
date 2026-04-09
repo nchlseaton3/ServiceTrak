@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContexts";
 import { api } from "../services/api";
-import ServiceRecordsList from "../components/ServiceRecordsList";
-import "../components/ServiceRecords.css";
+import ServiceRecordsList from "../components/ServiceRecords/ServiceRecordsList";
+import "../components/ServiceRecords/ServiceRecords.css";
 
 export default function ServiceRecords() {
   const { token } = useAuth();

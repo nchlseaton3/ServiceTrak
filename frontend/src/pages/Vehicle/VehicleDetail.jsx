@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContexts";
-import { api } from "../services/api";
-import ServiceRecordAttachments from "../components/ServiceRecordAttachments";
+import { useAuth } from "../../contexts/AuthContexts";
+import { api } from "../../services/api";
+import ServiceRecordAttachments from "../../components/ServiceRecords/ServiceRecordAttachments";
 
 export default function VehicleDetail() {
   const { id } = useParams();

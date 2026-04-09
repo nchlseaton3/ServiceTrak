@@ -16,9 +16,9 @@ a:hover { text-decoration: underline; }
 
 /* Layout */
 .container {
-  max-width: 500px;
+  max-width: 900px;
   margin: auto;
-  padding: 2px;
+  padding: 16px;
 }
 
 .stack { display: grid; gap: 14px; }
@@ -106,13 +106,6 @@ a:hover { text-decoration: underline; }
   align-items: flex-start;
 }
 
-.vehicle-card {
-  padding: 16px;
-  background: #fff;
-  border: 1px solid #d9dde3;
-  border-radius: 14px;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
-}
 
 .vehicle-list {
   display: grid;
@@ -185,21 +178,6 @@ a:hover { text-decoration: underline; }
   background: #f8fafc;
   color: #475569;
   border-color: #d9dde3;
-}
-
-@media (max-width: 640px) {
-  .vehicle-card-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .vehicle-card-actions {
-    width: 100%;
-  }
-
-  .vehicle-card-actions .btn {
-    width: 100%;
-  }
 }
 
 @media (max-width: 640px) {

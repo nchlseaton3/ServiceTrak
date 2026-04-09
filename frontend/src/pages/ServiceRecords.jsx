@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContexts";
 import { api } from "../services/api";
 import ServiceRecordsList from "../components/ServiceRecordsList";
+import "../components/ServiceRecords.css";
 
 export default function ServiceRecords() {
   const { token } = useAuth();
@@ -28,7 +29,7 @@ export default function ServiceRecords() {
   }, []);
 
   return (
-    <div className="container stack">
+    <div className="container service-records-page">
       <div className="card">
         <h2>Service Records</h2>
         <p className="muted">

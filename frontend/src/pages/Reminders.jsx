@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContexts";
 import { api } from "../services/api";
 import RemindersList from "../components/RemindersList";
+import "../components/Reminders.css";
 
 export default function Reminders() {
   const { token } = useAuth();
@@ -28,7 +29,7 @@ export default function Reminders() {
   }, []);
 
   return (
-    <div className="container stack">
+    <div className="container reminders-page">
       <div className="card">
         <h2>Reminders</h2>
         <p className="muted">

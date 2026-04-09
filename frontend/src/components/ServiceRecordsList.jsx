@@ -5,28 +5,22 @@ export default function ServiceRecordsList({ records, loading, error }) {
     currency: "USD",
   });
 
-  if (loading) {
-    return <p className="muted">Loading service records...</p>;
-  }
-
-  if (error) {
-    return <p className="error">{error}</p>;
-  }
-
+  if (loading) return <p className="muted">Loading service records...</p>;
+  if (error) return <p className="error">{error}</p>;
   if (!records || records.length === 0) {
     return <p className="muted">No service records yet.</p>;
   }
 
   return (
-    <div className="stack">
+    <div className="service-records-list">
       {records.map((r) => (
-        <div key={r.id} className="itemCard">
-          <div className="itemRow">
-            <div style={{ flex: 1 }}>
+        <div key={r.id} className="service-record-card">
+          <div className="service-record-row">
+            <div className="service-record-info">
               <b>{r.title}</b>{" "}
               <span className="muted">({r.category || "—"})</span>
 
-              <div className="muted" style={{ marginTop: 6 }}>
+              <div className="muted service-record-meta">
                 <div>Date: {r.service_date}</div>
                 {r.mileage !== null && r.mileage !== undefined && (
                   <div>Mileage: {numberFmt.format(r.mileage)}</div>
@@ -36,7 +30,7 @@ export default function ServiceRecordsList({ records, loading, error }) {
                 )}
               </div>
 
-              {r.notes && <p style={{ marginTop: 8 }}>{r.notes}</p>}
+              {r.notes && <p className="service-record-notes">{r.notes}</p>}
             </div>
           </div>
         </div>

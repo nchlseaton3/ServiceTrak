@@ -20,6 +20,14 @@ def reminder_to_dict(r: Reminder):
         "notes": r.notes,
         "created_at": r.created_at.isoformat() if r.created_at else None,
         "updated_at": r.updated_at.isoformat() if r.updated_at else None,
+
+        "vehicle": {
+            "id": r.vehicle.id,
+            "nickname": r.vehicle.nickname,
+            "year": r.vehicle.year,
+            "make": r.vehicle.make,
+            "model": r.vehicle.model,
+        } if r.vehicle else None,
     }
 
 

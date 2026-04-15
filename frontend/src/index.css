@@ -129,11 +129,15 @@ a:hover { text-decoration: underline; }
 }
 
 .vehicle-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   flex-shrink: 0;
 }
 
 .vehicle-card-actions .btn {
-  min-width: 90px;
+  min-width: 100px;
   text-align: center;
 }
 

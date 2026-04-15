@@ -52,6 +52,20 @@ export default function VehicleList({ vehicles, loading, error }) {
               >
                 Open
               </Link>
+
+              <Link
+                className="btn btn-secondary"
+                to={`/service-records?vehicle_id=${vehicle.id}`}
+              >
+                Records
+              </Link>
+
+              <Link
+                className="btn btn-secondary"
+                to={`/reminders?vehicle_id=${vehicle.id}`}
+              >
+                Reminders
+              </Link>
             </div>
           </div>
         </div>

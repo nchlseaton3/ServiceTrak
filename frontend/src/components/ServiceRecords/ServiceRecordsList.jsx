@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function ServiceRecordsList({ records, loading, error }) {
   const numberFmt = new Intl.NumberFormat();
   const moneyFmt = new Intl.NumberFormat(undefined, {
@@ -12,40 +14,51 @@ export default function ServiceRecordsList({ records, loading, error }) {
   }
 
   return (
-  <div className="service-records-list">
-    {records.map((r) => (
-      <div key={r.id} className="service-record-card">
-        <div className="service-record-row">
-          <div className="service-record-info">
-            <div>
-              <b>{r.title}</b>{" "}
-              <span className="muted">({r.category || "—"})</span>
+    <div className="service-records-list">
+      {records.map((r) => (
+        <div key={r.id} className="service-record-card">
+          <div className="service-record-row">
+            <div className="service-record-info">
+              <div>
+                <b>{r.title}</b>{" "}
+                <span className="muted">({r.category || "—"})</span>
+              </div>
+
+              {r.vehicle && (
+                <div className="muted service-record-meta">
+                  Vehicle: <b>{r.vehicle.nickname || "Vehicle"}</b>
+                  {" — "}
+                  {r.vehicle.year || "?"} {r.vehicle.make || ""}{" "}
+                  {r.vehicle.model || ""}
+                </div>
+              )}
+
+              <div className="muted service-record-meta">
+                <div>Date: {r.service_date}</div>
+                {r.mileage !== null && r.mileage !== undefined && (
+                  <div>Mileage: {numberFmt.format(r.mileage)}</div>
+                )}
+                {r.cost !== null && r.cost !== undefined && (
+                  <div>Cost: {moneyFmt.format(Number(r.cost))}</div>
+                )}
+              </div>
+
+              {r.notes && <p className="service-record-notes">{r.notes}</p>}
             </div>
 
             {r.vehicle && (
-              <div className="muted service-record-meta">
-                Vehicle: <b>{r.vehicle.nickname || "Vehicle"}</b>
-                {" — "}
-                {r.vehicle.year || "?"} {r.vehicle.make || ""}{" "}
-                {r.vehicle.model || ""}
+              <div className="service-record-actions">
+                <Link
+                  className="btn btn-secondary"
+                  to={`/vehicles/${r.vehicle.id}`}
+                >
+                  Open Vehicle
+                </Link>
               </div>
             )}
-
-            <div className="muted service-record-meta">
-              <div>Date: {r.service_date}</div>
-              {r.mileage !== null && r.mileage !== undefined && (
-                <div>Mileage: {numberFmt.format(r.mileage)}</div>
-              )}
-              {r.cost !== null && r.cost !== undefined && (
-                <div>Cost: {moneyFmt.format(Number(r.cost))}</div>
-              )}
-            </div>
-
-            {r.notes && <p className="service-record-notes">{r.notes}</p>}
           </div>
         </div>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
 }

@@ -1,3 +1,12 @@
+.reminder-actions {
+  flex-shrink: 0;
+}
+
+.reminder-actions .btn {
+  min-width: 120px;
+  text-align: center;
+}
+
 .reminders-page {
   display: grid;
   gap: 16px;

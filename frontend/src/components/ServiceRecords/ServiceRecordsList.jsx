@@ -51,6 +51,7 @@ export default function ServiceRecordsList({ records, loading, error }) {
                 <Link
                   className="btn btn-secondary"
                   to={`/vehicles/${r.vehicle.id}`}
+                  state={{ from: "service-records" }}
                 >
                   Open Vehicle
                 </Link>

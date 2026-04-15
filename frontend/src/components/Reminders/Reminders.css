@@ -61,4 +61,12 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .reminder-actions {
+  width: 100%;
+}
+
+.reminder-actions .btn {
+  width: 100%;
+}
 }

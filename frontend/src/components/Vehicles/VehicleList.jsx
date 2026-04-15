@@ -49,10 +49,10 @@ export default function VehicleList({ vehicles, loading, error }) {
               <Link
                 className="btn btn-secondary"
                 to={`/vehicles/${vehicle.id}`}
+                state={{ from: "vehicles" }}
               >
                 Open
               </Link>
-
               <Link
                 className="btn btn-secondary"
                 to={`/service-records?vehicle_id=${vehicle.id}`}

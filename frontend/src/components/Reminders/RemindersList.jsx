@@ -43,6 +43,7 @@ export default function RemindersList({ reminders, loading, error }) {
                 <Link
                   className="btn btn-secondary"
                   to={`/vehicles/${r.vehicle.id}`}
+                  state={{ from: "reminders" }}
                 >
                   Open Vehicle
                 </Link>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContexts";
 import { api } from "../../services/api";
 
@@ -7,7 +7,8 @@ export default function VehicleDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useAuth();
-
+  const location = useLocation();
+  const from = location.state?.from;
   const [vehicle, setVehicle] = useState(null);
   const [isEditingVehicle, setIsEditingVehicle] = useState(false);
   const [error, setError] = useState("");
@@ -95,7 +96,7 @@ export default function VehicleDetail() {
   async function handleDeleteVehicle() {
     if (
       !confirm(
-        "Delete this vehicle? This will remove its records and reminders too."
+        "Delete this vehicle? This will remove its records and reminders too.",
       )
     ) {
       return;
@@ -259,8 +260,19 @@ export default function VehicleDetail() {
     );
   }
 
+  function getBackLink() {
+    if (from === "service-records") return "/service-records";
+    if (from === "reminders") return "/reminders";
+    return "/vehicles";
+  }
+
   return (
     <div className="container stack">
+      <div className="back-link-row">
+        <Link className="btn btn-secondary" to={getBackLink()}>
+          ← Back
+        </Link>
+      </div>
       <div className="card">
         <h2 style={{ margin: 0 }}>
           {vehicle.nickname || "Vehicle"}{" "}
@@ -536,7 +548,10 @@ export default function VehicleDetail() {
         >
           <div>
             <h3 style={{ margin: 0 }}>Recall Lookup</h3>
-            <p className="small muted" style={{ marginTop: 6, marginBottom: 0 }}>
+            <p
+              className="small muted"
+              style={{ marginTop: 6, marginBottom: 0 }}
+            >
               Check for open recalls using the vehicle&apos;s year, make, and
               model.
             </p>
@@ -588,9 +603,7 @@ export default function VehicleDetail() {
                 )}
 
                 {recall.report_date && (
-                  <div className="muted">
-                    Report Date: {recall.report_date}
-                  </div>
+                  <div className="muted">Report Date: {recall.report_date}</div>
                 )}
 
                 {recall.summary && (

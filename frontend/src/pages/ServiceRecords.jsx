@@ -46,7 +46,7 @@ export default function ServiceRecords() {
         </p>
       </div>
 
-      <ServiceRecordsList records={records} loading={loading} error={error} />
+      <ServiceRecordsList records={records} loading={loading} error={error} token={token}/>
     </div>
   );
 }

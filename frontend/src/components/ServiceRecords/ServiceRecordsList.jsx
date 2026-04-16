@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import ServiceRecordAttachments from "./ServiceRecordAttachments";
 
-export default function ServiceRecordsList({ records, loading, error }) {
+export default function ServiceRecordsList({ records, loading, error, token }) {
   const numberFmt = new Intl.NumberFormat();
   const moneyFmt = new Intl.NumberFormat(undefined, {
     style: "currency",
@@ -44,6 +45,8 @@ export default function ServiceRecordsList({ records, loading, error }) {
               </div>
 
               {r.notes && <p className="service-record-notes">{r.notes}</p>}
+
+              <ServiceRecordAttachments recordId={r.id} token={token} />
             </div>
 
             {r.vehicle && (

@@ -12,6 +12,7 @@ export default function VehicleDetail() {
   const [vehicle, setVehicle] = useState(null);
   const [isEditingVehicle, setIsEditingVehicle] = useState(false);
   const [error, setError] = useState("");
+  const [recordAttachmentFile, setRecordAttachmentFile] = useState(null);
 
   const [recordForm, setRecordForm] = useState({
     title: "",
@@ -126,7 +127,26 @@ export default function VehicleDetail() {
     };
 
     try {
-      await api.createServiceRecord(token, payload);
+      const createRes = await api.createServiceRecord(token, payload);
+
+      // adjust this depending on your backend response shape
+      const newRecord =
+        createRes.service_record || createRes.record || createRes.serviceRecord;
+
+      if (!newRecord?.id) {
+        throw new Error(
+          "Service record was created, but no record ID was returned.",
+        );
+      }
+
+      if (recordAttachmentFile) {
+        await api.uploadServiceRecordAttachment(
+          token,
+          newRecord.id,
+          recordAttachmentFile,
+        );
+      }
+
       setRecordForm({
         title: "",
         category: "Maintenance",
@@ -135,6 +155,11 @@ export default function VehicleDetail() {
         cost: "",
         notes: "",
       });
+      setRecordAttachmentFile(null);
+
+      const fileInput = document.getElementById("record-attachment-file");
+      if (fileInput) fileInput.value = "";
+      
       navigate(`/service-records?vehicle_id=${id}`);
     } catch (err) {
       setError(err.message);
@@ -481,6 +506,20 @@ export default function VehicleDetail() {
             placeholder="Notes (optional)"
             rows={3}
           />
+
+          <input
+            id="record-attachment-file"
+            className="input"
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp,.pdf"
+            onChange={(e) =>
+              setRecordAttachmentFile(e.target.files?.[0] || null)
+            }
+          />
+
+          <p className="small muted" style={{ margin: 0 }}>
+            Optional: attach a receipt, invoice, image, or PDF.
+          </p>
 
           <button className="btn" type="submit">
             Add Service Record

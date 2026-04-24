@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.utils.nhtsa import decode_vin
@@ -9,6 +10,11 @@ vehicles_bp = Blueprint("vehicles", __name__)
 
 
 def vehicle_to_dict(v: Vehicle):
+    reminder_count = len(v.reminders) if v.reminders else 0
+    open_reminder_count = len([r for r in v.reminders if not r.is_completed]) if v.reminders else 0
+    service_record_count = len(v.service_records) if v.service_records else 0
+
+    
     return {
         "id": v.id,
         "user_id": v.user_id,
@@ -19,6 +25,12 @@ def vehicle_to_dict(v: Vehicle):
         "model": v.model,
         "trim": v.trim,
         "engine": v.engine,
+        "service_record_count": service_record_count,
+        "reminder_count": reminder_count,
+        "open_reminder_count": open_reminder_count,
+        "is_decoded": bool(v.year and v.make and v.model),
+        "recall_count": v.recall_count or 0,
+        "recall_checked_at": v.recall_checked_at.isoformat() if v.recall_checked_at else None,
         "created_at": v.created_at.isoformat() if v.created_at else None,
         "updated_at": v.updated_at.isoformat() if v.updated_at else None,
     }
@@ -248,6 +260,9 @@ def get_vehicle_recalls(vehicle_id: int):
 
     try:
         recalls = lookup_recalls(vehicle.year, vehicle.make, vehicle.model)
+        vehicle.recall_count = len(recalls)
+        vehicle.recall_checked_at = datetime.utcnow()
+        db.session.commit()
     except Exception:
         return jsonify({"message": "Failed to fetch recalls."}), 502
 

@@ -184,6 +184,18 @@ a:hover { text-decoration: underline; }
   border-color: #d9dde3;
 }
 
+.status-info {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.status-warning {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
 .auth-page {
   min-height: calc(100vh - 80px);
   display: grid;

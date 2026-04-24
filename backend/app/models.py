@@ -35,6 +35,10 @@ class Vehicle(db.Model, TimestampMixin):
     trim = db.Column(db.String(120))
     engine = db.Column(db.String(120))
 
+    recall_checked_at = db.Column(db.DateTime)
+    recall_count = db.Column(db.Integer, default=0)
+    
+
     service_records = db.relationship("ServiceRecord", backref="vehicle", cascade="all, delete-orphan", lazy=True)
     reminders = db.relationship("Reminder", backref="vehicle", cascade="all, delete-orphan", lazy=True)
 

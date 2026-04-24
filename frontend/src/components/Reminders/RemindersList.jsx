@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 
+
 export default function RemindersList({ reminders, loading, error }) {
   const numberFmt = new Intl.NumberFormat();
 
-  if (loading) return <p className="muted">Loading reminders...</p>;
+  if (loading) return <Loader text="Loading reminders..." />;
   if (error) return <p className="error">{error}</p>;
   if (!reminders || reminders.length === 0) {
     return <p className="muted">No reminders yet.</p>;

@@ -280,7 +280,7 @@ export default function VehicleDetail() {
   if (!vehicle) {
     return (
       <div className="container">
-        <p className="muted">Loading...</p>
+        <Loader text="Loading vehicle..." />
       </div>
     );
   }

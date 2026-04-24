@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import ServiceRecordAttachments from "./ServiceRecordAttachments";
 import ServiceRecordAttachmentList from "./ServiceRecordAttachmentList";
+import Loader from "../Loader/Loader";
 
 export default function ServiceRecordsList({ records, loading, error, token }) {
   const numberFmt = new Intl.NumberFormat();
@@ -9,7 +10,7 @@ export default function ServiceRecordsList({ records, loading, error, token }) {
     currency: "USD",
   });
 
-  if (loading) return <p className="muted">Loading service records...</p>;
+  if (loading) return <Loader text="Loading service records..." />;
   if (error) return <p className="error">{error}</p>;
   if (!records || records.length === 0) {
     return <p className="muted">No service records yet.</p>;

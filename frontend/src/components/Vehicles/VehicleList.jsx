@@ -1,8 +1,9 @@
+import Loader from "../Loader/Loader";
 import { Link } from "react-router-dom";
 
 export default function VehicleList({ vehicles, loading, error }) {
   if (loading) {
-    return <p className="muted">Loading vehicles...</p>;
+    return <Loader text="Loading vehicles..." />;
   }
 
   if (error) {

@@ -5,6 +5,7 @@ from app.utils.nhtsa import decode_vin
 from app.extensions import db
 from app.models import Vehicle
 import requests
+from sqlalchemy import text
 
 vehicles_bp = Blueprint("vehicles", __name__)
 
@@ -66,6 +67,21 @@ def lookup_recalls(year, make, model):
 @vehicles_bp.get("/health")
 def health():
     return jsonify({"status": "ok", "service": "vehicles"}), 200
+
+@vehicles_bp.get("/fix-db")
+def fix_db():
+    try:
+        db.session.execute(text("ALTER TABLE vehicles ADD COLUMN recall_count INTEGER DEFAULT 0;"))
+    except Exception as e:
+        print("recall_count may already exist:", e)
+
+    try:
+        db.session.execute(text("ALTER TABLE vehicles ADD COLUMN recall_checked_at DATETIME;"))
+    except Exception as e:
+        print("recall_checked_at may already exist:", e)
+
+    db.session.commit()
+    return jsonify({"message": "DB update attempted."}), 200
 
 
 # CREATE vehicle

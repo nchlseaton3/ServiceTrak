@@ -30,8 +30,12 @@ def vehicle_to_dict(v: Vehicle):
         "reminder_count": reminder_count,
         "open_reminder_count": open_reminder_count,
         "is_decoded": bool(v.year and v.make and v.model),
-        "recall_count": v.recall_count or 0,
-        "recall_checked_at": v.recall_checked_at.isoformat() if v.recall_checked_at else None,
+        "recall_count": getattr(v, "recall_count", 0),
+        "recall_checked_at": (
+        v.recall_checked_at.isoformat()
+        if getattr(v, "recall_checked_at", None)
+        else None
+),
         "created_at": v.created_at.isoformat() if v.created_at else None,
         "updated_at": v.updated_at.isoformat() if v.updated_at else None,
     }
@@ -67,6 +71,23 @@ def lookup_recalls(year, make, model):
 @vehicles_bp.get("/health")
 def health():
     return jsonify({"status": "ok", "service": "vehicles"}), 200
+
+from sqlalchemy import text
+
+@vehicles_bp.get("/fix-db")
+def fix_db():
+    try:
+        db.session.execute(text("ALTER TABLE vehicles ADD COLUMN recall_count INTEGER DEFAULT 0;"))
+    except Exception as e:
+        print("recall_count may already exist:", e)
+
+    try:
+        db.session.execute(text("ALTER TABLE vehicles ADD COLUMN recall_checked_at DATETIME;"))
+    except Exception as e:
+        print("recall_checked_at may already exist:", e)
+
+    db.session.commit()
+    return jsonify({"message": "DB update attempted."}), 200
 
 
 # CREATE vehicle

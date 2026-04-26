@@ -30,9 +30,9 @@ def vehicle_to_dict(v: Vehicle):
         "reminder_count": reminder_count,
         "open_reminder_count": open_reminder_count,
         "is_decoded": bool(v.year and v.make and v.model),
-        "recall_count": getattr(v, "recall_count", 0),
+        "recall_count": getattr(v, "recall_count", 0) or 0,
         "recall_checked_at": (
-        v.recall_checked_at.isoformat()
+        getattr(v, "recall_checked_at", None).isoformat()
         if getattr(v, "recall_checked_at", None)
         else None
 ),

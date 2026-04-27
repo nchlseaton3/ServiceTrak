@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContexts";
 import { api } from "../../services/api";
+import Loader from "../../components/Loader/Loader";
 
 export default function VehicleDetail() {
   const { id } = useParams();

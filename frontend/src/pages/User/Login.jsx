@@ -8,18 +8,22 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
+
     try {
       await login(email, password);
-      navigate("/");
+      navigate("/vehicles");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   }
-
   return (
     <div className="auth-page">
       <div className="card auth-card">
@@ -40,9 +44,22 @@ export default function Login() {
             placeholder="Password"
             type="password"
           />
-          <button className="btn" type="submit">
-            Sign in
+          <button className="btn" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span className="btn-spinner" />
+                Signing in...
+              </span>
+            ) : (
+              "Sign In"
+            )}
           </button>
+
+          {isSubmitting && (
+            <p className="small muted demo-note">
+              Waking up backend... this may take a few seconds on first load.
+            </p>
+          )}
         </form>
 
         <p className="auth-link-row">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../contexts/AuthContexts";
+import { useAuth } from "../../contexts/useAuth";
 import { api } from "../../services/api";
 
 export default function Profile() {

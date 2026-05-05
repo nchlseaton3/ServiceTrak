@@ -4,6 +4,13 @@ import os
 load_dotenv()
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+DEFAULT_CORS_ORIGINS = ",".join(
+    [
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+        "https://service-trak.vercel.app",
+    ]
+)
 
 class Config:
     ENV = os.getenv("FLASK_ENV", "production")
@@ -31,7 +38,7 @@ class Config:
 
     CORS_ORIGINS = [
         origin.strip()
-        for origin in os.getenv("CORS_ORIGINS", "http://127.0.0.1:5173,http://localhost:5173").split(",")
+        for origin in os.getenv("CORS_ORIGINS", DEFAULT_CORS_ORIGINS).split(",")
         if origin.strip()
     ]
 

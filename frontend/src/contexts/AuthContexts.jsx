@@ -1,14 +1,13 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "../services/api";
-
-const AuthContext = createContext(null);
+import { AuthContext } from "./AuthContext";
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  async function loadProfile(nextToken = token) {
+  const loadProfile = useCallback(async (nextToken = token) => {
     if (!nextToken) {
       setUser(null);
       setLoading(false);
@@ -26,12 +25,11 @@ export function AuthProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [token]);
 
   useEffect(() => {
     loadProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadProfile]);
 
   async function login(email, password) {
     const data = await api.login({ email, password });
@@ -57,12 +55,8 @@ export function AuthProvider({ children }) {
 
   const value = useMemo(
     () => ({ token, user, loading, login, register, logout, loadProfile }),
-    [token, user, loading]
+    [token, user, loading, loadProfile]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

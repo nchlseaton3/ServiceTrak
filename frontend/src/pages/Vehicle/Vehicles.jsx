@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../contexts/AuthContexts";
+import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "../../contexts/useAuth";
 import { api } from "../../services/api";
 import VehicleList from "../../components/Vehicles/VehicleList";
 
@@ -9,7 +9,7 @@ export default function Vehicles() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  async function loadVehicles() {
+  const loadVehicles = useCallback(async () => {
     setError("");
     setLoading(true);
     try {
@@ -20,11 +20,11 @@ export default function Vehicles() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [token]);
 
   useEffect(() => {
     loadVehicles();
-  }, []);
+  }, [loadVehicles]);
 
   return (
     <div className="container stack">

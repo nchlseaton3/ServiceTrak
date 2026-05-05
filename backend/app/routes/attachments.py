@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.extensions import db
 from app.models import ServiceRecord, Vehicle, ServiceRecordAttachment
+from app.utils.storage import delete_attachment_file
 import cloudinary.uploader
 
 
@@ -118,14 +119,7 @@ def delete_service_record_attachment(attachment_id: int):
         return jsonify({"message": "Attachment not found."}), 404
 
     try:
-        resource_type = "image"
-        if attachment.file_type and "pdf" in attachment.file_type.lower():
-            resource_type = "raw"
-
-        cloudinary.uploader.destroy(
-            attachment.public_id,
-            resource_type=resource_type,
-        )
+        delete_attachment_file(attachment)
     except Exception:
         pass
 

@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from .extensions import db, init_extensions
+from .extensions import init_extensions
 from .models import User, Vehicle, ServiceRecord, Reminder, ServiceRecordAttachment  # noqa: F401
 from config import Config
 import cloudinary
@@ -14,15 +14,13 @@ def create_app():
     os.makedirs(instance_path, exist_ok=True)
 
     cloudinary.config(
-    cloud_name=app.config.get("CLOUDINARY_CLOUD_NAME"),
-    api_key=app.config.get("CLOUDINARY_API_KEY"),
-    api_secret=app.config.get("CLOUDINARY_API_SECRET"),
-    secure=True,
-)
+        cloud_name=app.config.get("CLOUDINARY_CLOUD_NAME"),
+        api_key=app.config.get("CLOUDINARY_API_KEY"),
+        api_secret=app.config.get("CLOUDINARY_API_SECRET"),
+        secure=True,
+    )
 
     init_extensions(app)
-
-    
 
     # Register blueprints
     from .routes.auth import auth_bp
@@ -36,10 +34,5 @@ def create_app():
     app.register_blueprint(service_records_bp, url_prefix="/service-records")
     app.register_blueprint(reminders_bp, url_prefix="/reminders")
     app.register_blueprint(attachments_bp)
-
-
-    # Create tables
-    with app.app_context():
-        db.create_all()
 
     return app

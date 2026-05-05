@@ -4,8 +4,9 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.utils.nhtsa import decode_vin
 from app.extensions import db
 from app.models import Vehicle
+from app.utils.storage import delete_attachment_files
+from app.utils.validation import normalize_vin, parse_non_negative_int
 import requests
-from sqlalchemy import text
 
 vehicles_bp = Blueprint("vehicles", __name__)
 
@@ -81,10 +82,11 @@ def create_vehicle():
     data = request.get_json(silent=True) or {}
 
     nickname = (data.get("nickname") or "").strip() or None
-    vin = (data.get("vin") or "").strip().upper() or None
+    raw_vin = (data.get("vin") or "").strip()
+    vin = normalize_vin(raw_vin)
 
     # Optional basic VIN validation if provided
-    if vin and len(vin) != 17:
+    if raw_vin and vin is None:
         return jsonify({"message": "VIN must be 17 characters."}), 400
     
         # Duplicate VIN check (per user)
@@ -97,7 +99,7 @@ def create_vehicle():
         user_id=user_id,
         nickname=nickname,
         vin=vin,
-        year=data.get("year"),
+        year=parse_non_negative_int(data.get("year")),
         make=(data.get("make") or "").strip() or None,
         model=(data.get("model") or "").strip() or None,
         trim=(data.get("trim") or "").strip() or None,
@@ -147,8 +149,9 @@ def update_vehicle(vehicle_id: int):
         vehicle.nickname = (data.get("nickname") or "").strip() or None
 
     if "vin" in data:
-        vin = (data.get("vin") or "").strip().upper() or None
-        if vin and len(vin) != 17:
+        raw_vin = (data.get("vin") or "").strip()
+        vin = normalize_vin(raw_vin)
+        if raw_vin and vin is None:
             return jsonify({"message": "VIN must be 17 characters."}), 400
                 # Duplicate VIN check (per user) excluding this vehicle
         if vin:
@@ -163,7 +166,10 @@ def update_vehicle(vehicle_id: int):
 
     # Decoded/entered details (optional)
     if "year" in data:
-        vehicle.year = data.get("year")
+        year = parse_non_negative_int(data.get("year"))
+        if data.get("year") not in (None, "") and year is None:
+            return jsonify({"message": "year must be a non-negative integer."}), 400
+        vehicle.year = year
     if "make" in data:
         vehicle.make = (data.get("make") or "").strip() or None
     if "model" in data:
@@ -187,6 +193,8 @@ def delete_vehicle(vehicle_id: int):
     if not vehicle:
         return jsonify({"message": "Vehicle not found."}), 404
 
+    for record in vehicle.service_records:
+        delete_attachment_files(record.attachments)
     db.session.delete(vehicle)
     db.session.commit()
     return jsonify({"message": "Vehicle deleted."}), 200

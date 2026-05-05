@@ -1,9 +1,10 @@
-from datetime import date
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.extensions import db
 from app.models import ServiceRecord, Vehicle
+from app.utils.storage import delete_attachment_files
+from app.utils.validation import parse_date, parse_non_negative_decimal, parse_non_negative_int
 
 service_records_bp = Blueprint("service_records", __name__)
 service_records_bp.strict_slashes = False
@@ -32,15 +33,6 @@ def service_record_to_dict(r: ServiceRecord):
     }
 
 
-def _parse_date(value):
-    if not value:
-        return None
-    try:
-        return date.fromisoformat(value)  # expects YYYY-MM-DD
-    except ValueError:
-        return None
-
-
 @service_records_bp.get("/health")
 def health():
     return jsonify({"status": "ok", "service": "service_records"}), 200
@@ -61,7 +53,7 @@ def create_service_record():
     if not vehicle_id or not title or not service_date_str:
         return jsonify({"message": "vehicle_id, title, and service_date are required."}), 400
 
-    service_date = _parse_date(service_date_str)
+    service_date = parse_date(service_date_str)
     if not service_date:
         return jsonify({"message": "service_date must be YYYY-MM-DD."}), 400
 
@@ -70,12 +62,14 @@ def create_service_record():
     if not vehicle:
         return jsonify({"message": "Vehicle not found."}), 404
 
-    mileage = data.get("mileage")
-    cost = data.get("cost")
+    mileage = parse_non_negative_int(data.get("mileage"))
+    cost = parse_non_negative_decimal(data.get("cost"))
     notes = (data.get("notes") or "").strip() or None
 
-    if mileage is not None and isinstance(mileage, int) and mileage < 0:
-        return jsonify({"message": "mileage must be >= 0."}), 400
+    if data.get("mileage") not in (None, "") and mileage is None:
+        return jsonify({"message": "mileage must be a non-negative integer."}), 400
+    if data.get("cost") not in (None, "") and cost is None:
+        return jsonify({"message": "cost must be a non-negative number."}), 400
 
     record = ServiceRecord(
         vehicle_id=vehicle.id,
@@ -153,19 +147,22 @@ def update_service_record(record_id: int):
         record.category = (data.get("category") or "").strip() or None
 
     if "service_date" in data:
-        new_date = _parse_date(data.get("service_date"))
+        new_date = parse_date(data.get("service_date"))
         if not new_date:
             return jsonify({"message": "service_date must be YYYY-MM-DD."}), 400
         record.service_date = new_date
 
     if "mileage" in data:
-        mileage = data.get("mileage")
-        if mileage is not None and isinstance(mileage, int) and mileage < 0:
-            return jsonify({"message": "mileage must be >= 0."}), 400
+        mileage = parse_non_negative_int(data.get("mileage"))
+        if data.get("mileage") not in (None, "") and mileage is None:
+            return jsonify({"message": "mileage must be a non-negative integer."}), 400
         record.mileage = mileage
 
     if "cost" in data:
-        record.cost = data.get("cost")
+        cost = parse_non_negative_decimal(data.get("cost"))
+        if data.get("cost") not in (None, "") and cost is None:
+            return jsonify({"message": "cost must be a non-negative number."}), 400
+        record.cost = cost
 
     if "notes" in data:
         record.notes = (data.get("notes") or "").strip() or None
@@ -197,6 +194,7 @@ def delete_service_record(record_id: int):
     if not record:
         return jsonify({"message": "Service record not found."}), 404
 
+    delete_attachment_files(record.attachments)
     db.session.delete(record)
     db.session.commit()
     return jsonify({"message": "Service record deleted."}), 200

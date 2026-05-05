@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "../../services/api";
 import "./ServiceRecordAttachments.css";
 
@@ -7,7 +7,7 @@ export default function ServiceRecordAttachmentList({ recordId, token }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  async function loadAttachments() {
+  const loadAttachments = useCallback(async () => {
     setError("");
     setLoading(true);
 
@@ -19,11 +19,11 @@ export default function ServiceRecordAttachmentList({ recordId, token }) {
     } finally {
       setLoading(false);
     }
-  }
+  }, [recordId, token]);
 
   useEffect(() => {
     loadAttachments();
-  }, [recordId]);
+  }, [loadAttachments]);
 
   function isImage(fileType = "") {
     return fileType.startsWith("image/");

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContexts";
+import { useAuth } from "../contexts/useAuth";
 import { api } from "../services/api";
 import ServiceRecordsList from "../components/ServiceRecords/ServiceRecordsList";
 import "../components/ServiceRecords/ServiceRecords.css";
@@ -14,7 +14,7 @@ export default function ServiceRecords() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  async function loadRecords() {
+  const loadRecords = useCallback(async () => {
     setError("");
     setLoading(true);
 
@@ -29,11 +29,11 @@ export default function ServiceRecords() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [token, vehicleId]);
 
   useEffect(() => {
     loadRecords();
-  }, [vehicleId]);
+  }, [loadRecords]);
 
   return (
     <div className="container service-records-page">

@@ -1,9 +1,9 @@
-from datetime import date
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.extensions import db
 from app.models import Reminder, Vehicle
+from app.utils.validation import parse_date, parse_non_negative_int
 
 reminders_bp = Blueprint("reminders", __name__)
 reminders_bp.strict_slashes = False
@@ -31,15 +31,6 @@ def reminder_to_dict(r: Reminder):
     }
 
 
-def _parse_date(value):
-    if not value:
-        return None
-    try:
-        return date.fromisoformat(value)  # YYYY-MM-DD
-    except ValueError:
-        return None
-
-
 @reminders_bp.get("/health")
 def health():
     return jsonify({"status": "ok", "service": "reminders"}), 200
@@ -64,12 +55,13 @@ def create_reminder():
     if not due_date_str and due_mileage is None:
         return jsonify({"message": "Provide due_date or due_mileage."}), 400
 
-    due_date = _parse_date(due_date_str)
+    due_date = parse_date(due_date_str)
     if due_date_str and not due_date:
         return jsonify({"message": "due_date must be YYYY-MM-DD."}), 400
 
-    if due_mileage is not None and isinstance(due_mileage, int) and due_mileage < 0:
-        return jsonify({"message": "due_mileage must be >= 0."}), 400
+    parsed_due_mileage = parse_non_negative_int(due_mileage)
+    if due_mileage not in (None, "") and parsed_due_mileage is None:
+        return jsonify({"message": "due_mileage must be a non-negative integer."}), 400
 
     # Ownership check
     vehicle = Vehicle.query.filter_by(id=vehicle_id, user_id=user_id).first()
@@ -80,7 +72,7 @@ def create_reminder():
         vehicle_id=vehicle.id,
         title=title,
         due_date=due_date,
-        due_mileage=due_mileage,
+        due_mileage=parsed_due_mileage,
         notes=(data.get("notes") or "").strip() or None,
     )
 
@@ -155,15 +147,15 @@ def update_reminder(reminder_id: int):
         reminder.title = title
 
     if "due_date" in data:
-        new_date = _parse_date(data.get("due_date"))
+        new_date = parse_date(data.get("due_date"))
         if data.get("due_date") and not new_date:
             return jsonify({"message": "due_date must be YYYY-MM-DD."}), 400
         reminder.due_date = new_date
 
     if "due_mileage" in data:
-        mileage = data.get("due_mileage")
-        if mileage is not None and isinstance(mileage, int) and mileage < 0:
-            return jsonify({"message": "due_mileage must be >= 0."}), 400
+        mileage = parse_non_negative_int(data.get("due_mileage"))
+        if data.get("due_mileage") not in (None, "") and mileage is None:
+            return jsonify({"message": "due_mileage must be a non-negative integer."}), 400
         reminder.due_mileage = mileage
 
     if "is_completed" in data:

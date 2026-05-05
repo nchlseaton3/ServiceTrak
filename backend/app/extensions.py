@@ -8,7 +8,7 @@ jwt = JWTManager()
 migrate = Migrate()
 
 def init_extensions(app):
-    CORS(app)
+    CORS(app, origins=app.config.get("CORS_ORIGINS", []))
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)

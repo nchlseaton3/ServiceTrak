@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContexts";
+import { useAuth } from "../contexts/useAuth";
 import { api } from "../services/api";
 import RemindersList from "../components/Reminders/RemindersList";
 import "../components/Reminders/Reminders.css";
@@ -14,7 +14,7 @@ export default function Reminders() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  async function loadReminders() {
+  const loadReminders = useCallback(async () => {
     setError("");
     setLoading(true);
 
@@ -29,11 +29,11 @@ export default function Reminders() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [token, vehicleId]);
 
   useEffect(() => {
     loadReminders();
-  }, [vehicleId]);
+  }, [loadReminders]);
 
   return (
     <div className="container reminders-page">

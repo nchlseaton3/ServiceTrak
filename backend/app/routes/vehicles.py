@@ -1,9 +1,8 @@
-from datetime import datetime
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.utils.nhtsa import decode_vin
 from app.extensions import db
-from app.models import Vehicle
+from app.models import Vehicle, utc_now
 from app.utils.storage import delete_attachment_files
 from app.utils.validation import normalize_vin, parse_non_negative_int
 import requests
@@ -274,7 +273,7 @@ def get_vehicle_recalls(vehicle_id: int):
     try:
         recalls = lookup_recalls(vehicle.year, vehicle.make, vehicle.model)
         vehicle.recall_count = len(recalls)
-        vehicle.recall_checked_at = datetime.utcnow()
+        vehicle.recall_checked_at = utc_now()
         db.session.commit()
     except Exception:
         return jsonify({"message": "Failed to fetch recalls."}), 502

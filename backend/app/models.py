@@ -1,9 +1,13 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from .extensions import db
 
+
+def utc_now():
+    return datetime.now(timezone.utc)
+
 class TimestampMixin:
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    created_at = db.Column(db.DateTime, default=utc_now, nullable=False)
+    updated_at = db.Column(db.DateTime, default=utc_now, onupdate=utc_now, nullable=False)
 
 class User(db.Model, TimestampMixin):
     __tablename__ = "users"

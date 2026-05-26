@@ -1,9 +1,8 @@
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
-
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 DEFAULT_CORS_ORIGINS = ",".join(
     [
         "http://127.0.0.1:5173",

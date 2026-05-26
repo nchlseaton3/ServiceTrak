@@ -99,7 +99,7 @@ def upload_service_record_attachment(record_id: int):
 
     except Exception as e:
         print("Cloudinary upload failed:", str(e))
-        return jsonify({"message": f"Failed to upload attachment: {str(e)}"}), 502
+        return jsonify({"message": "Failed to upload attachment."}), 502
 
 
 @attachments_bp.delete("/attachments/<int:attachment_id>")

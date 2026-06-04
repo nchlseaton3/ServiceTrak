@@ -242,6 +242,132 @@ a:hover { text-decoration: underline; }
   max-width: 520px; /* slightly wider than auth */
 }
 
+.dashboard-page {
+  max-width: 1120px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.dashboard-header h1 {
+  margin: 0 0 6px;
+}
+
+.dashboard-header p {
+  margin: 0;
+}
+
+.dashboard-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dashboard-stat {
+  display: grid;
+  gap: 6px;
+  min-height: 126px;
+  align-content: start;
+}
+
+.dashboard-stat:hover {
+  text-decoration: none;
+  border-color: #cbd5e1;
+}
+
+.dashboard-stat strong {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.dashboard-stat-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+.dashboard-stat-alert {
+  border-color: #fed7aa;
+}
+
+.dashboard-two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dashboard-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.dashboard-section-header h2 {
+  margin: 0;
+}
+
+.dashboard-list {
+  display: grid;
+  gap: 10px;
+}
+
+.dashboard-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.dashboard-list-item:hover {
+  text-decoration: none;
+  border-color: #cbd5e1;
+}
+
+.dashboard-list-item p {
+  margin: 4px 0 0;
+}
+
+.dashboard-value {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #334155;
+}
+
+.dashboard-recall-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.dashboard-recall-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dashboard-empty {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+}
+
+.dashboard-empty h2,
+.dashboard-empty p {
+  margin: 0;
+}
+
 @media (max-width: 640px) {
   .vehicle-card-row {
     flex-direction: column;
@@ -254,6 +380,23 @@ a:hover { text-decoration: underline; }
 
   .vehicle-card-actions .btn {
     width: 100%;
+  }
+
+  .dashboard-header {
+    display: grid;
+  }
+
+  .dashboard-summary-grid,
+  .dashboard-two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-section-header {
+    align-items: flex-start;
+  }
+
+  .dashboard-list-item {
+    flex-direction: column;
   }
 }
 

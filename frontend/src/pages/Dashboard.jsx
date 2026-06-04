@@ -230,7 +230,7 @@ export default function Dashboard() {
                 <Link
                   key={record.id}
                   className="dashboard-list-item"
-                  to={`/vehicles/${record.vehicle_id}`}
+                  to={`/service-records?vehicle_id=${record.vehicle_id}`}
                 >
                   <div>
                     <strong>{record.title}</strong>
@@ -316,7 +316,7 @@ export default function Dashboard() {
               <Link
                 key={reminder.id}
                 className="dashboard-list-item"
-                to={`/vehicles/${reminder.vehicle_id}`}
+                to={`/reminders?vehicle_id=${reminder.vehicle_id}`}
               >
                 <span>{reminder.title}</span>
                 <span className="dashboard-value">
@@ -349,7 +349,7 @@ function DashboardReminderList({ title, emptyText, reminders, isOverdue = false 
             <Link
               key={reminder.id}
               className="dashboard-list-item"
-              to={`/vehicles/${reminder.vehicle_id}`}
+              to={`/reminders?vehicle_id=${reminder.vehicle_id}`}
             >
               <div>
                 <strong>{reminder.title}</strong>
